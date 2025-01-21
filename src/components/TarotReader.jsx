@@ -154,14 +154,19 @@ const TarotReader = () => {
 
       {/* Analyze Button */}
       {revealedCards.length === spreads[spread].count && (
-        <div className="mt-4">
-          <button
-            onClick={analyzeDraw}
-            className="px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
-          >
-            {loading ? "Analyzing..." : "Analyze Draw"}
-          </button>
-        </div>
+        <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          analyzeDraw();
+        }}
+      >
+        <button
+          type="submit"
+          className="px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
+        >
+          {loading ? "Analyzing..." : "Analyze Draw"}
+        </button>
+      </form>
       )}
 
       {/* Response */}
