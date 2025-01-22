@@ -161,11 +161,14 @@ const TarotReader = () => {
         }}
       >
         <button
-          type="submit"
-          className="px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
-        >
-          {loading ? "Analyzing..." : "Analyze Draw"}
+            type="button"
+            onClick={analyzeDraw}
+            onTouchStart={analyzeDraw}
+            className="px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
+            >
+            {loading ? "Analyzing..." : "Analyze Draw"}
         </button>
+
       </form>
       )}
 
