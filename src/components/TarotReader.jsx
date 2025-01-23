@@ -62,6 +62,7 @@ const TarotReader = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           session_id: "unique-session-id",
+          spread: spreads[spread].label,
           tarot_cards: selectedCards,
           user_context: context,
         }),
@@ -95,8 +96,8 @@ const TarotReader = () => {
         <div className="mb-4">
           <label className="block text-lg font-semibold mb-2">Choose a spread:</label>
           <select
-            value={spread}
-            onChange={(e) => setSpread(e.target.value)}
+            value={spreads[spread].label}
+            onChange={(e) => setSpread(Object.keys(spreads).find(key => spreads[key].label === e.target.value))}
             className="block w-full p-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800"
           >
             {Object.entries(spreads).map(([key, value]) => (
@@ -130,7 +131,7 @@ const TarotReader = () => {
         </div>
 
         {/* Cards Display */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="flex flex-wrap justify-center gap-6 my-8">
           {drawnCards.map((card, index) => (
             <div
               key={index}
@@ -166,9 +167,8 @@ const TarotReader = () => {
                   <img
                     src={`/tarot/cards/${card.img}`}
                     alt={card.name}
-                    className="w-full h-40 object-cover rounded-t-lg"
-                    loading="lazy"
-                  />
+                    className={`w-full h-40 object-cover rounded-t-lg ${revealedCards.includes(index) && drawnCards[index].orientation === "reversed" ? "rotate-180" : ""}`}
+                    loading="lazy" />
                   <p className="mt-2 text-lg font-semibold">{card.name}</p>
                 </div>
               </div>
@@ -178,19 +178,21 @@ const TarotReader = () => {
 
         {/* Analyze Button */}
         {revealedCards.length === spreads[spread].count && (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              analyzeDraw();
-            }}
-          >
-            <button
-              type="submit"
-              className="px-6 py-3 bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white font-bold rounded-md hover:from-green-500 hover:to-green-700 transform hover:scale-110 transition-transform duration-300 ease-in-out animate-pulse shadow-lg ring-4 ring-green-300 hover:ring-green-500"
+          <div className="mt-8 text-center">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                analyzeDraw();
+              }}
             >
-              {loading ? "Analyzing..." : "Analyze Draw"}
-            </button>
-          </form>
+              <button
+                type="submit"
+                className="px-6 py-3 bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white font-bold rounded-md hover:from-green-500 hover:to-green-700 transform hover:scale-110 transition-transform duration-300 ease-in-out animate-pulse shadow-lg ring-4 ring-green-300 hover:ring-green-500"
+              >
+                {loading ? "Analyzing..." : "Analyze Draw"}
+              </button>
+            </form>
+          </div>
         )}
 
         {/* Response */}
