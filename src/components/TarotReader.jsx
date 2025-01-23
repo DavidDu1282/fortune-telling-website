@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 
 const TarotReader = () => {
   const [spread, setSpread] = useState("three_card");
@@ -37,12 +38,15 @@ const TarotReader = () => {
     const shuffledDeck = [...tarotDeck].sort(() => Math.random() - 0.5);
     setDrawnCards(shuffledDeck.slice(0, count));
     setRevealedCards([]);
+    revealCardsSequentially(shuffledDeck.slice(0, count));
   };
 
-  const revealCard = (index) => {
-    if (!revealedCards.includes(index) && revealedCards.length < spreads[spread].count) {
-      setRevealedCards([...revealedCards, index]);
-    }
+  const revealCardsSequentially = (cards) => {
+    cards.forEach((_, index) => {
+      setTimeout(() => {
+        setRevealedCards((prev) => [...prev, index]);
+      }, index * 500); // 500ms delay per card
+    });
   };
 
   const analyzeDraw = async () => {
@@ -71,6 +75,13 @@ const TarotReader = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const getSparkleEffect = (index) => {
+    if (revealedCards.includes(index)) {
+      return "animate-sparkle-big";
+    }
+    return "animate-sparkle-small";
   };
 
   return (
@@ -122,41 +133,46 @@ const TarotReader = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {drawnCards.map((card, index) => (
             <div
-            key={index}
-            onClick={() => revealCard(index)}
-                className={`relative w-40 h-60 flex items-center justify-center rounded-lg cursor-pointer transform-gpu perspective-1000 transition-transform duration-1000 ease-in-out hover:scale-105 ${
-                revealedCards.includes(index)
-                    ? "rotate-y-180 bg-yellow-300 border-yellow-500 shadow-xl ring-4 ring-yellow-400"
-                    : "rotate-y-0 bg-indigo-800 border-indigo-900 shadow-lg ring-2 ring-indigo-400"
+              key={index}
+              className={`relative w-40 h-60 cursor-pointer perspective-1000 ${getSparkleEffect(index)}`}
+            >
+              {/* Card Inner */}
+              <div
+                className={`w-full h-full transition-transform duration-700 ease-in-out transform ${
+                  revealedCards.includes(index) ? "rotate-y-180" : "rotate-y-0"
                 }`}
                 style={{
-                backfaceVisibility: "hidden",
-                transformStyle: "preserve-3d",
+                  transformStyle: "preserve-3d", // Ensures 3D rendering
                 }}
-            >
-            {revealedCards.includes(index) ? (
-              <div
-                className="absolute w-full h-full flex flex-col items-center justify-center transform rotate-y-180"
-                style={{ backfaceVisibility: "hidden" }}
               >
-                <img
+                {/* Front Face */}
+                <div
+                  className="absolute w-full h-full bg-indigo-800 text-gray-200 flex items-center justify-center rounded-lg shadow-lg border-2 border-indigo-900"
+                  style={{
+                    backfaceVisibility: "hidden", // Ensures the back face stays hidden
+                  }}
+                >
+                  <p className="text-2xl font-bold">?</p>
+                </div>
+
+                {/* Back Face */}
+                <div
+                  className="absolute w-full h-full bg-yellow-300 text-black flex flex-col items-center justify-center rounded-lg shadow-xl border-2 border-yellow-500"
+                  style={{
+                    transform: "rotateY(180deg)", // Pre-rotates the back face for flipping
+                    backfaceVisibility: "hidden", // Hides the front when flipping
+                  }}
+                >
+                  <img
                     src={`/tarot/cards/${card.img}`}
                     alt={card.name}
                     className="w-full h-40 object-cover rounded-t-lg"
-                />
-                <p className="mt-2 text-lg font-semibold text-black">{card.name}</p>
+                    loading="lazy"
+                  />
+                  <p className="mt-2 text-lg font-semibold">{card.name}</p>
+                </div>
               </div>
-            ) : (
-              <div
-                className="absolute w-full h-full flex items-center justify-center transform rotate-y-0"
-                style={{ backfaceVisibility: "hidden" }}
-              >
-                <p className="text-2xl font-bold text-gray-200">?</p>
-              </div>
-            )}
-          </div>
-          
-          
+            </div>
           ))}
         </div>
 
@@ -169,25 +185,22 @@ const TarotReader = () => {
             }}
           >
             <button
-                type="submit"
-                onClick={analyzeDraw}
-                className="px-6 py-3 bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white font-bold rounded-md hover:from-green-500 hover:to-green-700 transform hover:scale-110 transition-transform duration-300 ease-in-out animate-pulse shadow-lg ring-4 ring-green-300 hover:ring-green-500"
+              type="submit"
+              className="px-6 py-3 bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white font-bold rounded-md hover:from-green-500 hover:to-green-700 transform hover:scale-110 transition-transform duration-300 ease-in-out animate-pulse shadow-lg ring-4 ring-green-300 hover:ring-green-500"
             >
-                {loading ? "Analyzing..." : "Analyze Draw"}
+              {loading ? "Analyzing..." : "Analyze Draw"}
             </button>
-
           </form>
         )}
 
         {/* Response */}
         {response && (
-            <div className="mt-8 p-6 bg-white text-gray-800 rounded-lg shadow-lg transform transition-all duration-500 ease-out opacity-0 scale-95 animate-fade-in">
-                <h2 className="text-2xl font-bold mb-4">Your Tarot Analysis</h2>
-                <p className="font-medium mb-4">{response}</p>
-                <p>{detailedAnalysis}</p>
-            </div>
+          <div className="mt-8 p-6 bg-white text-gray-800 rounded-lg shadow-lg transform transition-all duration-500 ease-out opacity-0 scale-95 animate-fade-in">
+            <h2 className="text-2xl font-bold mb-4">Your Tarot Analysis</h2>
+            <ReactMarkdown className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl">{response}</ReactMarkdown>
+            <ReactMarkdown className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl">{detailedAnalysis}</ReactMarkdown>
+          </div>
         )}
-
       </div>
     </div>
   );

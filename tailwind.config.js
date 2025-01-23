@@ -27,8 +27,6 @@ export default {
       },
     },
   },
-  // darkMode: "media", // Enables dark mode based on user's system settings
   darkMode: false, // Disables dark mode
-
   plugins: [],
 };

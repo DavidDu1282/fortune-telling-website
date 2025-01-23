@@ -29,6 +29,49 @@ button {
   display: none !important;
 }
 
+
+@layer utilities {
+  .rotate-x-0 {
+    transform: rotateX(0deg);
+  }
+  .rotate-x-180 {
+    transform: rotateX(180deg);
+  }
+  .rotate-y-0 {
+    transform: rotateY(0deg);
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  .animate-sparkle-small {
+    position: relative;
+    animation: sparkleSmall 2s infinite;
+  }
+
+  .animate-sparkle-big {
+    position: relative;
+    animation: sparkleBig 2s infinite;
+  }
+
+  @keyframes sparkleSmall {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.3), 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  @keyframes sparkleBig {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.8);
+    }
+  }
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
