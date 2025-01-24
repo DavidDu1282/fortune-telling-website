@@ -1,5 +1,5 @@
 import React from "react";
-import { spreads } from "./spreads";
+import { spreads } from "./Spreads";
 
 const SpreadSelector = ({ spread, setSpread, language }) => (
   <div className="mb-4">
