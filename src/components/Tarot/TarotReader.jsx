@@ -7,7 +7,7 @@ import CardDisplay from "./CardDisplay";
 import AnalysisButton from "./AnalysisButton";
 import AnalysisResult from "./AnalysisResult";
 import { fetchTarotDeck } from "./api";
-import { spreads } from "./spreads";
+import { spreads } from "./Spreads";
 
 const TarotReader = () => {
   const [spread, setSpread] = useState("three_card");
