@@ -2,7 +2,8 @@ import { useState } from 'react';
 import Header from './components/Header';
 import Tabs from './components/Tabs';
 import Form from './components/Form';
-import TarotReader from './components/TarotReader';
+// import TarotReader from './components/TarotReader';
+import TarotReader from './components/Tarot/TarotReader';
 
 export default function App() {
     const [currentTab, setCurrentTab] = useState('bazi');
@@ -18,10 +19,10 @@ export default function App() {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <Header />
-            <Tabs onTabChange={setCurrentTab} />
+            {/* <Header /> */}
+            {/* <Tabs onTabChange={setCurrentTab} /> */}
 
-            <Form formType={currentTab} onSubmit={handleFormSubmit} />
+            {/* <Form formType={currentTab} onSubmit={handleFormSubmit} /> */}
             <TarotReader />
         </div>
     );
