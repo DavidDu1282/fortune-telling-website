@@ -60,7 +60,7 @@ const TarotReader = () => {
         body: JSON.stringify({
           session_id: "unique-session-id",
           spread: spreads[spread].label[language],
-          tarot_cards: selectedCards,
+          tarot_cards: selectedCards.map(card => ({ ...card, name: language === 'zh' ? card.nameZh : card.name })),
           user_context: context,
           language: language,
         }),
@@ -127,8 +127,8 @@ const TarotReader = () => {
                     {language === "zh" ? "选择卡牌" : "Select Card"}
                   </option>
                   {tarotDeck.map((card) => (
-                    <option key={card.name} value={card.name}>
-                      {card.name}
+                    <option key={language === 'zh' ? card.nameZh : card.name} value={language === 'zh' ? card.nameZh : card.name}>
+                      {language === 'zh' ? card.nameZh : card.name}
                     </option>
                   ))}
                 </select>

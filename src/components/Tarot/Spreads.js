@@ -1,6 +1,6 @@
 export const spreads = {
     three_card: {
-      label: { zh: "三张牌阵 (过去，现在，未来)", en: "Three-Card Spread (Past, Present, Future)" },
+      label: { zh: "过去、现在、未来", en: "Three-Card Spread (Past, Present, Future)" },
       count: 3,
     },
     celtic_cross: {

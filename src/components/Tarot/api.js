@@ -2,7 +2,7 @@ const API_URL = import.meta.env.VITE_API_URL || "";
 
 export const fetchTarotDeck = async () => {
   try {
-    const response = await fetch("/tarot/optimized_tarot.json");
+    const response = await fetch("/tarot/optimized_tarot_translated.json");
     const data = await response.json();
     return data.cards;
   } catch (error) {

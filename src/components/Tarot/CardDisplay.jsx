@@ -35,7 +35,9 @@ const CardDisplay = ({ drawnCards, revealedCards, language }) => (
               }`}
               loading="lazy"
             />
-            <p className="mt-2 text-lg font-semibold">{card.name}</p>
+            <p className="mt-2 text-lg font-semibold">
+              {language === "zh" ? card.nameZh : card.name}
+            </p>
           </div>
         </div>
       </div>
