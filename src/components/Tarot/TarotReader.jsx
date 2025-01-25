@@ -113,7 +113,7 @@ const TarotReader = () => {
         </div>
 
         {manualMode ? (
-          <div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {Array.from({ length: spreads[spread].count }).map((_, index) => (
               <div key={index} className="mb-4">
                 <label className="block text-lg font-semibold mb-2">
