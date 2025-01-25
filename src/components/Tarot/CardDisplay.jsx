@@ -5,7 +5,7 @@ const CardDisplay = ({ drawnCards, revealedCards, language }) => (
     {drawnCards.map((card, index) => (
       <div
         key={index}
-        className={`relative w-[calc(100vw/8)] max-w-[350px] h-[calc((100vw/8)*600/350)] max-h-[600px] cursor-pointer perspective-1000 ${
+        className={`relative w-[calc(100vw/2.5)] max-w-[200px] sm:w-[calc(100vw/4)] sm:max-w-[250px] md:w-[calc(100vw/6)] md:max-w-[300px] lg:w-[calc(100vw/8)] lg:max-w-[350px] h-[calc((100vw/2.5)*600/350)] max-h-[400px] sm:h-[calc((100vw/4)*600/350)] sm:max-h-[450px] md:h-[calc((100vw/6)*600/350)] md:max-h-[500px] lg:h-[calc((100vw/8)*600/350)] lg:max-h-[600px] cursor-pointer perspective-1000 ${
           revealedCards.includes(index) ? "animate-sparkle-big" : "animate-sparkle-small"
         }`}
       >
