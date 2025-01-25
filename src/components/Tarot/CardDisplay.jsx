@@ -5,7 +5,7 @@ const CardDisplay = ({ drawnCards, revealedCards, language }) => (
     {drawnCards.map((card, index) => (
       <div
         key={index}
-        className={`relative w-40 h-60 cursor-pointer perspective-1000 ${
+        className={`relative w-[calc(100vw/8)] max-w-[350px] h-[calc((100vw/8)*600/350)] max-h-[600px] cursor-pointer perspective-1000 ${
           revealedCards.includes(index) ? "animate-sparkle-big" : "animate-sparkle-small"
         }`}
       >
@@ -24,18 +24,18 @@ const CardDisplay = ({ drawnCards, revealedCards, language }) => (
           </div>
           {/* Card Front */}
           <div
-            className="absolute w-full h-full bg-yellow-300 text-black flex flex-col items-center justify-center rounded-lg shadow-xl border-2 border-yellow-500"
+            className="absolute w-full h-full bg-yellow-300 text-black flex flex-col items-center justify-between rounded-lg shadow-xl border-2 border-yellow-500"
             style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
           >
             <img
               src={`/tarot/cards/${card.img}`}
               alt={card.name}
-              className={`w-full h-40 object-cover rounded-t-lg ${
+              className={`w-full h-[calc(100%-40px)] object-cover rounded-t-lg ${
                 revealedCards.includes(index) && card.orientation === "reversed" ? "rotate-180" : ""
               }`}
               loading="lazy"
             />
-            <p className="mt-2 text-lg font-semibold">
+            <p className="h-10 flex items-center justify-center text-lg font-semibold text-center">
               {language === "zh" ? card.nameZh : card.name}
             </p>
           </div>
