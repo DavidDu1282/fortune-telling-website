@@ -1,4 +1,4 @@
-// Main Component (TarotReader.jsx)
+// Main Tarot component (TarotReader.jsx)
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import SpreadSelector from "./SpreadSelector";
