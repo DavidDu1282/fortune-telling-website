@@ -1,9 +1,9 @@
 const API_URL = import.meta.env.VITE_API_URL || "";
-
+const BASE_URL = import.meta.env.VITE_BASE_URL || "/";
 export const fetchTarotDeck = async () => {
   try {
     // Append a timestamp to the URL to prevent caching issues
-    const response = await fetch(`/tarot/optimized_tarot_translated.json?t=${new Date().getTime()}`, {
+    const response = await fetch(`${BASE_URL}tarot/optimized_tarot_translated.json`, {
       mode: "cors", // Ensures proper handling for cross-origin requests
     });
 
