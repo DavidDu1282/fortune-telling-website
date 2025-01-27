@@ -26,16 +26,17 @@ jobs:
         run: |
           ssh-keyscan -H 150.136.107.196 >> ~/.ssh/known_hosts
 
-      # Step 4: Install Node.js and build the project
+      # Step 4: Install Node.js, Corepack, and build the project
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install dependencies and build
+      - name: Enable Corepack and install dependencies with Yarn
         run: |
-          npm install
-          npm run build
+          corepack enable
+          yarn install
+          yarn build
 
       # Step 5: Deploy built files to the server
       - name: Deploy to Oracle VM
