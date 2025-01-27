@@ -1,0 +1,61 @@
+name: Deploy React Frontend
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment on push to the main branch
+      - master  # Trigger deployment on push to the master branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up SSH for deployment
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+      # Step 3: Add host key to known hosts
+      - name: Add host key to known hosts
+        run: |
+          ssh-keyscan -H 150.136.107.196 >> ~/.ssh/known_hosts
+
+      # Step 4: Install Node.js and build the project
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      # Step 5: Deploy built files to the server
+      - name: Deploy to Oracle VM
+        env:
+          RSYNC_PASSWORD: ${{ secrets.RSYNC_PASSWORD }} # Optional: If you use rsync with a password
+        run: |
+          rsync -avz --delete ./build/ ubuntu@150.136.107.196:/home/ubuntu/fortune-telling-website/
+
+      # Step 6: Restart Nginx
+      - name: Restart Nginx
+        run: |
+          ssh ubuntu@150.136.107.196 << 'EOF'
+          echo "Restarting Nginx..."
+          sudo systemctl restart nginx
+          EOF
+
+      # Step 7: Verify Deployment
+      - name: Verify Deployment
+        run: |
+          ssh ubuntu@150.136.107.196 << 'EOF'
+          echo "Checking Nginx status..."
+          sudo systemctl status nginx
+          EOF
