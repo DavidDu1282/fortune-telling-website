@@ -2,14 +2,35 @@ const API_URL = import.meta.env.VITE_API_URL || "";
 
 export const fetchTarotDeck = async () => {
   try {
-    const response = await fetch("/tarot/optimized_tarot_translated.json");
-    const data = await response.json();
+    // Append a timestamp to the URL to prevent caching issues
+    const response = await fetch(`/tarot/optimized_tarot_translated.json?t=${new Date().getTime()}`, {
+      mode: "cors", // Ensures proper handling for cross-origin requests
+    });
+
+    // Check if the response status is OK
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    // Retrieve the text content and log for debugging
+    const text = await response.text();
+    console.log("Fetched content:", text);
+
+    // Parse the JSON data
+    const data = JSON.parse(text);
+
+    // Validate that the "cards" field exists
+    if (!data.cards) {
+      throw new Error("Invalid JSON structure: Missing 'cards' field");
+    }
+
     return data.cards;
   } catch (error) {
-    console.error("Error fetching tarot deck:", error);
+    console.error("Error fetching tarot deck:", error.message);
     return [];
   }
 };
+
 
 export const analyzeDraw = async (drawnCards, revealedCards, spread, context, language) => {
   const selectedCards = revealedCards.map((index) => ({
