@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set Environment Variables for GitHub Pages
+    - name: Set VITE_BASE_URL Environment Variable for GitHub Pages
       run: echo "VITE_BASE_URL=/fortune-telling-website/" >> $GITHUB_ENV
-          echo "VITE_API_URL=https://fortunetelling.ddns.net" >> $GITHUB_ENV
+      
+    - name: Set VITE_API_URL Environment Variable for GitHub Pages
+      run: echo "VITE_API_URL=https://fortunetelling.ddns.net" >> $GITHUB_ENV
 
     - name: Checkout code
       uses: actions/checkout@v3
