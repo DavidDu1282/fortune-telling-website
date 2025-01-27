@@ -6,7 +6,7 @@ const CardDisplay = ({ drawnCards, revealedCards, language }) => (
     {drawnCards.map((card, index) => (
       <div
         key={index}
-        className={`relative w-[calc(100vw/2.5)] max-w-[200px] sm:w-[calc(100vw/4)] sm:max-w-[250px] md:w-[calc(100vw/6)] md:max-w-[300px] lg:w-[calc(100vw/8)] lg:max-w-[350px] h-[calc((100vw/2.5)*600/350)] max-h-[400px] sm:h-[calc((100vw/4)*600/350)] sm:max-h-[450px] md:h-[calc((100vw/6)*600/350)] md:max-h-[500px] lg:h-[calc((100vw/8)*600/350)] lg:max-h-[600px] cursor-pointer perspective-1000 ${
+        className={`relative w-[calc(100vw/2.5)] max-w-[200px] sm:w-[calc(100vw/4)] sm:max-w-[250px] md:w-[calc(100vw/6)] md:max-w-[300px] lg:w-[calc(100vw/8)] lg:max-w-[350px] h-[calc((100vw/2.5)*600/350)] max-h-[600px] sm:h-[calc((100vw/4)*600/350)] sm:max-h-[600px] md:h-[calc((100vw/6)*600/350)] md:max-h-[600px] lg:h-[calc((100vw/8)*600/350)] lg:max-h-[600px] cursor-pointer perspective-1000 ${
           revealedCards.includes(index) ? "animate-sparkle-big" : "animate-sparkle-small"
         }`}
       >
@@ -31,9 +31,7 @@ const CardDisplay = ({ drawnCards, revealedCards, language }) => (
             <img
               src={`${BASE_URL}tarot/cards/${card.img}`}
               alt={card.name}
-              className={`w-full h-[calc(100%-40px)] object-cover rounded-t-lg ${
-                revealedCards.includes(index) && card.orientation === "reversed" ? "rotate-180" : ""
-              }`}
+              className={`w-full h-full object-contain rounded-t-lg ${revealedCards.includes(index) && card.orientation === "reversed" ? "rotate-180" : ""}`}
               loading="lazy"
             />
             <p className="h-10 flex items-center justify-center text-lg font-semibold text-center">
