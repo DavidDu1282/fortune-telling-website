@@ -43,7 +43,7 @@ jobs:
         env:
           RSYNC_PASSWORD: ${{ secrets.RSYNC_PASSWORD }} # Optional: If you use rsync with a password
         run: |
-          rsync -avz --delete ./build/ ubuntu@150.136.107.196:/home/ubuntu/fortune-telling-website/
+          rsync -avz --delete ./dist/ ubuntu@150.136.107.196:/home/ubuntu/fortune-telling-website/
 
       # Step 6: Restart Nginx
       - name: Restart Nginx
