@@ -1,4 +1,5 @@
 import React from "react";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "/";
 
 const CardDisplay = ({ drawnCards, revealedCards, language }) => (
   <div className="flex flex-wrap justify-center gap-6 my-8">
@@ -28,7 +29,7 @@ const CardDisplay = ({ drawnCards, revealedCards, language }) => (
             style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
           >
             <img
-              src={`/tarot/cards/${card.img}`}
+              src={`${BASE_URL}tarot/cards/${card.img}`}
               alt={card.name}
               className={`w-full h-[calc(100%-40px)] object-cover rounded-t-lg ${
                 revealedCards.includes(index) && card.orientation === "reversed" ? "rotate-180" : ""
