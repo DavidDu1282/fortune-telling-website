@@ -12,7 +12,8 @@ jobs:
     steps:
     - name: Set Environment Variables for GitHub Pages
       run: echo "VITE_BASE_URL=/fortune-telling-website/" >> $GITHUB_ENV
-      
+          echo "VITE_API_URL=https://fortunetelling.ddns.net" >> $GITHUB_ENV
+
     - name: Checkout code
       uses: actions/checkout@v3
 
