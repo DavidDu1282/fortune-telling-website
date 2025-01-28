@@ -23,6 +23,7 @@ const TarotReader = () => {
   const [manualCards, setManualCards] = useState([]);
 
   useEffect(() => {
+    document.title = "Tarot Reading App";
     const loadDeck = async () => {
       const deck = await fetchTarotDeck();
       setTarotDeck(deck);
