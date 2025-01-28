@@ -1,4 +1,4 @@
-// Main Tarot component (TarotReader.jsx)
+// Main Component (TarotReader.jsx)
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import SpreadSelector from "./SpreadSelector";
@@ -113,54 +113,62 @@ const TarotReader = () => {
         </div>
 
         {manualMode ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {Array.from({ length: spreads[spread].count }).map((_, index) => (
-              <div key={index} className="mb-4">
-                <label className="block text-lg font-semibold mb-2">
-                  {language === "zh" ? `卡牌 ${index + 1}` : `Card ${index + 1}`}:
-                </label>
-                <select
-                  onChange={(e) => handleManualCardChange(index, "name", e.target.value)}
-                  className="block w-full p-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800"
-                >
-                  <option value="">
-                    {language === "zh" ? "选择卡牌" : "Select Card"}
-                  </option>
-                  {tarotDeck.map((card) => (
-                    <option key={language === 'zh' ? card.nameZh : card.name} value={language === 'zh' ? card.nameZh : card.name}>
-                      {language === 'zh' ? card.nameZh : card.name}
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {Array.from({ length: spreads[spread].count }).map((_, index) => (
+                <div key={index} className="mb-4">
+                  <label className="block text-lg font-semibold mb-2">
+                    {language === "zh" ? `卡牌 ${index + 1}` : `Card ${index + 1}`}:
+                  </label>
+                  <select
+                    onChange={(e) => handleManualCardChange(index, "name", e.target.value)}
+                    className="block w-full p-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800"
+                  >
+                    <option value="">
+                      {language === "zh" ? "选择卡牌" : "Select Card"}
                     </option>
-                  ))}
-                </select>
-                <select
-                  onChange={(e) => handleManualCardChange(index, "orientation", e.target.value)}
-                  className="block w-full p-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800 mt-2"
-                >
-                  <option value="">
-                    {language === "zh" ? "选择方向" : "Select Orientation"}
-                  </option>
-                  <option value="upright">
-                    {language === "zh" ? "正位" : "Upright"}
-                  </option>
-                  <option value="reversed">
-                    {language === "zh" ? "逆位" : "Reversed"}
-                  </option>
-                </select>
-              </div>
-            ))}
+                    {tarotDeck.map((card) => (
+                      <option key={language === 'zh' ? card.nameZh : card.name} value={language === 'zh' ? card.nameZh : card.name}>
+                        {language === 'zh' ? card.nameZh : card.name}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    onChange={(e) => handleManualCardChange(index, "orientation", e.target.value)}
+                    className="block w-full p-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800 mt-2"
+                  >
+                    <option value="">
+                      {language === "zh" ? "选择方向" : "Select Orientation"}
+                    </option>
+                    <option value="upright">
+                      {language === "zh" ? "正位" : "Upright"}
+                    </option>
+                    <option value="reversed">
+                      {language === "zh" ? "逆位" : "Reversed"}
+                    </option>
+                  </select>
+                </div>
+              ))}
+            </div>
             <button
               onClick={handleAnalyzeManual}
-              className="px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
+              className="mt-6 px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
             >
               {language === "zh" ? "分析牌阵" : "Analyze Spread"}
             </button>
-          </div>
+          </>
         ) : (
           <div>
             <button onClick={drawCards} className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transform hover:scale-105 transition-transform duration-300">
               {language === "zh" ? "抽牌" : "Draw Cards"}
             </button>
             <CardDisplay drawnCards={drawnCards.map((card) => ({ ...card, orientation: Math.random() > 0.5 ? 'upright' : 'reversed' }))} revealedCards={revealedCards} language={language} />
+          </div>
+        )}
+
+        {loading && (
+          <div className="flex justify-center items-center my-8">
+            <p className="text-lg font-semibold">{language === "zh" ? "分析中..." : "Analyzing..."}</p>
           </div>
         )}
 
