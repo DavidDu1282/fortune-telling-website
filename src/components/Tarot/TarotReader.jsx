@@ -1,5 +1,6 @@
 // Main Component (TarotReader.jsx)
 import React, { useState, useEffect } from "react";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import Header from "./Header";
 import SpreadSelector from "./SpreadSelector";
 import QuestionInput from "./QuestionInput";
@@ -95,6 +96,16 @@ const TarotReader = () => {
   };
 
   return (
+  <HelmetProvider>
+    <Helmet>
+      <title>{language === "zh" ? "塔罗牌阅读应用" : "Tarot Reading App"}</title>
+      <meta name="description" content={language === "zh" ? "这是一个塔罗牌阅读应用。" : "This is a tarot reading app."} />
+      <meta property="og:title" content={language === "zh" ? "塔罗牌阅读应用" : "Tarot Reading App"} />
+      <meta property="og:description" content={language === "zh" ? "使用塔罗牌获得洞察和指导。" : "Get insights and guidance using tarot cards."} />
+      {/* <meta property="og:image" content="/path/to/your/image.jpg" /> */}
+      <meta property="og:url" content="https://fortunetelling.ddns.net" />
+    </Helmet>
+
     <div className="min-h-screen bg-gradient-to-b from-purple-900 via-indigo-800 to-purple-700 text-gray-100">
       <div className="container mx-auto p-6 relative">
         <Header language={language} setLanguage={setLanguage} />
@@ -182,6 +193,7 @@ const TarotReader = () => {
         )}
       </div>
     </div>
+  </HelmetProvider>
   );
 };
 
