@@ -1,29 +1,38 @@
-import { useState } from 'react';
-import Header from './components/Header';
-import Tabs from './components/Tabs';
-import Form from './components/Form';
-// import TarotReader from './components/TarotReader';
-import TarotReader from './components/Tarot/TarotReader';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import Home from "./pages/Home";
+import TarotPage from "./pages/TarotPage";
+import NewFeature from "./pages/NewFeature";
+import LanguageSwitcher from "./components/LanguageSwitcher";
 
-export default function App() {
-    const [currentTab, setCurrentTab] = useState('bazi');
+const App = () => {
+  const { t } = useTranslation(); // Use translations
 
-    const handleTabChange = (tab) => {
-        setCurrentTab(tab);
-    };
+  return (
+    <Router>
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 via-indigo-800 to-purple-700 text-gray-100">
+        {/* Navigation Bar */}
+        <nav className="flex justify-between items-center p-4 bg-gray-800 shadow-lg">
+          <div className="flex space-x-6">
+            <Link to="/" className="text-white hover:underline">{t("home")}</Link>
+            <Link to="/tarot" className="text-white hover:underline">{t("tarot_title")}</Link>
+            <Link to="/new-feature" className="text-white hover:underline">{t("new_feature")}</Link>
+          </div>
+          <LanguageSwitcher /> {/* Language Dropdown */}
+        </nav>
 
-    const handleFormSubmit = (formData) => {
-        console.log('Form Data:', formData);
-        alert('占卜结果正在生成...');
-    };
-
-    return (
-        <div className="min-h-screen bg-gray-100">
-            {/* <Header /> */}
-            {/* <Tabs onTabChange={setCurrentTab} /> */}
-
-            {/* <Form formType={currentTab} onSubmit={handleFormSubmit} /> */}
-            <TarotReader />
+        {/* Page Content */}
+        <div className="container mx-auto p-6">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/tarot" element={<TarotPage />} />
+            <Route path="/new-feature" element={<NewFeature />} />
+          </Routes>
         </div>
-    );
-}
+      </div>
+    </Router>
+  );
+};
+
+export default App;

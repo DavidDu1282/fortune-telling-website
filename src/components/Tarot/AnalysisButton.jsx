@@ -29,7 +29,7 @@ const AnalysisButton = ({
       onClick={handleAnalyze}
       className="px-6 py-3 bg-green-500 text-white font-bold rounded-md"
     >
-      {language === "zh" ? "分析牌阵" : "Analyze Draw"}
+      {t("tarot_analyze_draw")}
     </button>
   );
 };

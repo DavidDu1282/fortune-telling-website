@@ -1,16 +1,21 @@
-// Main Component (TarotReader.jsx)
 import React, { useState, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
 import Header from "./Header";
 import SpreadSelector from "./SpreadSelector";
 import QuestionInput from "./QuestionInput";
 import CardDisplay from "./CardDisplay";
 import AnalysisButton from "./AnalysisButton";
-import AnalysisResult from "./AnalysisResult";
+import AnalysisResults from "./AnalysisResults";
+import LoadingIndicator from "./LoadingIndicator";
+import ManualCardInput from "./ManualCardInput";
 import { fetchTarotDeck } from "./api";
 import { spreads } from "./Spreads";
 
 const TarotReader = () => {
+  const { t } = useTranslation();
+  const { i18n } = useTranslation(); // Get current language
+
   const [spread, setSpread] = useState("three_card");
   const [context, setContext] = useState("");
   const [tarotDeck, setTarotDeck] = useState([]);
@@ -19,18 +24,17 @@ const TarotReader = () => {
   const [response, setResponse] = useState("");
   const [detailedAnalysis, setDetailedAnalysis] = useState("");
   const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState("zh");
   const [manualMode, setManualMode] = useState(false);
   const [manualCards, setManualCards] = useState([]);
 
   useEffect(() => {
-    document.title = "Tarot Reading App";
+    document.title = t("tarot_title"); // Use translated title
     const loadDeck = async () => {
       const deck = await fetchTarotDeck();
       setTarotDeck(deck);
     };
     loadDeck();
-  }, []);
+  }, [t]);
 
   const drawCards = async () => {
     if (!tarotDeck.length) return;
@@ -38,7 +42,7 @@ const TarotReader = () => {
     const shuffledDeck = [...tarotDeck].sort(() => Math.random() - 0.5);
     const selectedCards = shuffledDeck.slice(0, count).map((card) => ({
       ...card,
-      orientation: Math.random() > 0.5 ? 'upright' : 'reversed',
+      orientation: Math.random() > 0.5 ? "upright" : "reversed",
     }));
     setDrawnCards(selectedCards);
     setRevealedCards([]);
@@ -56,18 +60,29 @@ const TarotReader = () => {
   const analyzeDraw = async (selectedCards) => {
     setLoading(true);
     try {
+      const requestBody = {
+        session_id: "unique-session-id", // Ensure session ID is always included
+        spread: spreads[spread].label[i18n.language], // Send full label
+        tarot_cards: selectedCards.map((card) => ({
+          name: card.name, // Ensure it's the correct field name
+          orientation: card.orientation // Ensure it's "upright" or "reversed"
+        })),
+        user_context: context,
+        language: i18n.language // Send correct language
+      };
+  
+      console.log("Sending API Request:", requestBody); // Debugging
+  
       const response = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/tarot/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          session_id: "unique-session-id",
-          spread: spreads[spread].label[language],
-          tarot_cards: selectedCards.map(card => ({ ...card, name: card.name })),
-          user_context: context,
-          language: language,
-        }),
+        body: JSON.stringify(requestBody),
       });
-
+  
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+  
       const result = await response.json();
       setResponse(result.message);
       setDetailedAnalysis(result.summary);
@@ -77,123 +92,50 @@ const TarotReader = () => {
       setLoading(false);
     }
   };
-
-  const handleManualCardChange = (index, field, value) => {
-    const updatedCards = [...manualCards];
-    updatedCards[index] = {
-      ...updatedCards[index],
-      [field]: value,
-    };
-    setManualCards(updatedCards);
-  };
-
-  const handleAnalyzeManual = () => {
-    if (manualCards.length === spreads[spread].count) {
-      analyzeDraw(manualCards);
-    } else {
-      alert(language === "zh" ? "请填写所有卡牌信息" : "Please fill out all card information.");
-    }
-  };
+  
 
   return (
-  <HelmetProvider>
-    <Helmet>
-      <title>{language === "zh" ? "塔罗牌阅读应用" : "Tarot Reading App"}</title>
-      <meta name="description" content={language === "zh" ? "这是一个塔罗牌阅读应用。" : "This is a tarot reading app."} />
-      <meta property="og:title" content={language === "zh" ? "塔罗牌阅读应用" : "Tarot Reading App"} />
-      <meta property="og:description" content={language === "zh" ? "使用塔罗牌获得洞察和指导。" : "Get insights and guidance using tarot cards."} />
-      {/* <meta property="og:image" content="/path/to/your/image.jpg" /> */}
-      <meta property="og:url" content="https://fortunetelling.ddns.net" />
-    </Helmet>
+    <HelmetProvider>
+      <Helmet>
+        <title>{t("tarot_title")}</title>
+      </Helmet>
 
-    <div className="min-h-screen bg-gradient-to-b from-purple-900 via-indigo-800 to-purple-700 text-gray-100">
-      <div className="container mx-auto p-6 relative">
-        <Header language={language} setLanguage={setLanguage} />
-        <SpreadSelector spread={spreads[spread].label[language]} setSpread={setSpread} language={language} />
-        <QuestionInput context={context} setContext={setContext} language={language} />
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 via-indigo-800 to-purple-700 text-gray-100">
+        <div className="container mx-auto p-6 relative">
+          <Header />
 
-        <div className="mb-4">
-          <label className="block text-lg font-semibold mb-2">
-            {language === "zh" ? "选择模式:" : "Choose Mode:"}
-          </label>
-          <button
-            onClick={() => setManualMode((prev) => !prev)}
-            className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600"
-          >
-            {manualMode ? (language === "zh" ? "切换到自动抽牌" : "Switch to Auto Draw") : (language === "zh" ? "切换到手动输入" : "Switch to Manual Input")}
-          </button>
+          <SpreadSelector spread={spreads[spread].label[i18n.language]} setSpread={setSpread} />
+          <QuestionInput context={context} setContext={setContext} />
+
+          <div className="mb-4">
+            <button onClick={() => setManualMode((prev) => !prev)}
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600">
+              {manualMode ? t("tarot_switch_to_auto") : t("tarot_switch_to_manual")}
+            </button>
+          </div>
+
+          {manualMode ? (
+            <ManualCardInput
+              tarotDeck={tarotDeck}
+              spread={spread}
+              manualCards={manualCards}
+              setManualCards={setManualCards}
+              analyzeDraw={analyzeDraw}
+            />
+          ) : (
+            <>
+              <button onClick={drawCards} className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">
+                {t("tarot_draw_cards")}
+              </button>
+              <CardDisplay drawnCards={drawnCards} revealedCards={revealedCards} />
+            </>
+          )}
+
+          {loading && <LoadingIndicator />}
+          <AnalysisResults detailedAnalysis={detailedAnalysis} />
         </div>
-
-        {manualMode ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {Array.from({ length: spreads[spread].count }).map((_, index) => (
-                <div key={index} className="mb-4">
-                  <label className="block text-lg font-semibold mb-2">
-                    {language === "zh" ? `卡牌 ${index + 1}` : `Card ${index + 1}`}:
-                  </label>
-                  <select
-                    onChange={(e) => handleManualCardChange(index, "name", e.target.value)}
-                    className="block w-full p-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800"
-                  >
-                    <option value="">
-                      {language === "zh" ? "选择卡牌" : "Select Card"}
-                    </option>
-                    {tarotDeck.map((card) => (
-                      <option key={language === 'zh' ? card.nameZh : card.name} value={language === 'zh' ? card.nameZh : card.name}>
-                        {language === 'zh' ? card.nameZh : card.name}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    onChange={(e) => handleManualCardChange(index, "orientation", e.target.value)}
-                    className="block w-full p-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800 mt-2"
-                  >
-                    <option value="">
-                      {language === "zh" ? "选择方向" : "Select Orientation"}
-                    </option>
-                    <option value="upright">
-                      {language === "zh" ? "正位" : "Upright"}
-                    </option>
-                    <option value="reversed">
-                      {language === "zh" ? "逆位" : "Reversed"}
-                    </option>
-                  </select>
-                </div>
-              ))}
-            </div>
-            <button
-              onClick={handleAnalyzeManual}
-              className="mt-6 px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
-            >
-              {language === "zh" ? "分析牌阵" : "Analyze Spread"}
-            </button>
-          </>
-        ) : (
-          <div>
-            <button onClick={drawCards} className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transform hover:scale-105 transition-transform duration-300">
-              {language === "zh" ? "抽牌" : "Draw Cards"}
-            </button>
-            <CardDisplay drawnCards={drawnCards.map((card) => ({ ...card, orientation: Math.random() > 0.5 ? 'upright' : 'reversed' }))} revealedCards={revealedCards} language={language} />
-          </div>
-        )}
-
-        {loading && (
-          <div className="flex justify-center items-center my-8">
-            <p className="text-lg font-semibold">{language === "zh" ? "分析中..." : "Analyzing..."}</p>
-          </div>
-        )}
-
-        {response && (
-          <AnalysisResult
-            response={response}
-            detailedAnalysis={detailedAnalysis}
-            language={language}
-          />
-        )}
       </div>
-    </div>
-  </HelmetProvider>
+    </HelmetProvider>
   );
 };
 
