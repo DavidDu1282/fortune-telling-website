@@ -1,15 +1,26 @@
 export const spreads = {
-    three_card: {
-      label: { zh: "过去、现在、未来", en: "Three-Card Spread (Past, Present, Future)" },
-      count: 3,
+  three_card: {
+    label: { 
+      en: "Three-Card Spread (Past, Present, Future)", 
+      zh: "过去、现在、未来", 
+      zh_TW: "過去、現在、未來" 
     },
-    celtic_cross: {
-      label: { zh: "凯尔特十字牌阵", en: "Celtic Cross" },
-      count: 10,
+    count: 3,
+  },
+  celtic_cross: {
+    label: { 
+      en: "Celtic Cross", 
+      zh: "凯尔特十字牌阵", 
+      zh_TW: "凱爾特十字牌陣" 
     },
-    custom: {
-      label: { zh: "自定义 (5 张牌)", en: "Custom (5 cards)" },
-      count: 5,
+    count: 10,
+  },
+  custom: {
+    label: { 
+      en: "Custom (5 cards)", 
+      zh: "自定义 (5 张牌)", 
+      zh_TW: "自訂 (5 張牌)" 
     },
-  };
-  
+    count: 5,
+  },
+};

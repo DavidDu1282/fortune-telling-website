@@ -6,8 +6,8 @@ const LanguageSwitcher = () => {
 
   const availableLanguages = [
     { code: "en", label: "English" },
-    { code: "zh", label: "中文" },
-    { code: "es", label: "Español" }
+    { code: "zh", label: "简体中文" },
+    { code: "zh_TW", label: "繁体中文" }
   ];
 
   return (

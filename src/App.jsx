@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import TarotPage from "./pages/TarotPage";
 import NewFeature from "./pages/NewFeature";
 import LanguageSwitcher from "./components/LanguageSwitcher";
+import CounsellorPage from "./pages/CounselorPage";
 
 const App = () => {
   const { t } = useTranslation(); // Use translations
@@ -18,6 +19,7 @@ const App = () => {
             <Link to="/" className="text-white hover:underline">{t("home")}</Link>
             <Link to="/tarot" className="text-white hover:underline">{t("tarot_title")}</Link>
             <Link to="/new-feature" className="text-white hover:underline">{t("new_feature")}</Link>
+            <Link to="/counsellor" className="text-white hover:underline">{t("counsellor_title")}</Link>
           </div>
           <LanguageSwitcher /> {/* Language Dropdown */}
         </nav>
@@ -28,6 +30,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/tarot" element={<TarotPage />} />
             <Route path="/new-feature" element={<NewFeature />} />
+            <Route path="/counsellor" element={<CounsellorPage />} />
           </Routes>
         </div>
       </div>

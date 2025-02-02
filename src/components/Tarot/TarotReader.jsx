@@ -117,7 +117,7 @@ const TarotReader = () => {
           {manualMode ? (
             <ManualCardInput
               tarotDeck={tarotDeck}
-              spread={spread}
+              spread={spreads[spread].count}
               manualCards={manualCards}
               setManualCards={setManualCards}
               analyzeDraw={analyzeDraw}
