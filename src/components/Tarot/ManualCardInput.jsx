@@ -1,49 +1,136 @@
-import React from "react";
-import { useTranslation } from "react-i18next"; 
+// src/components/Tarot/ManualCardInput.jsx
+import React, { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { useDeck } from "./DeckProvider";
 
-const ManualCardInput = ({ tarotDeck, spread, manualCards, setManualCards, analyzeDraw}) => {
+const ManualCardInput = ({
+  spread, // This is the *number* of cards
+  onManualAnalyze,
+}) => {
   const { t } = useTranslation();
-  const { i18n } = useTranslation();
-  const handleManualCardChange = (index, field, value) => {
-    const updatedCards = [...manualCards];
-    updatedCards[index] = { ...updatedCards[index], [field]: value };
-    setManualCards(updatedCards);
+  const { tarotDeck } = useDeck();
+
+  const [selectedCards, setSelectedCards] = useState(Array(spread).fill(null));
+
+  const cardOptions = useMemo(() => {
+    return tarotDeck.map((card) => ({
+      value: card.name,
+      label: card.name,
+      cardData: card,
+    }));
+    }, [tarotDeck]);
+
+  const orientationOptions = [
+    { value: "upright", label: t("tarot_upright") },
+    { value: "reversed", label: t("tarot_reversed") },
+  ];
+
+    useEffect(() => {
+        setSelectedCards(Array(spread).fill(null))
+    }, [spread])
+
+
+  const handleCardChange = (index, cardName) => {
+    const newSelectedCards = [...selectedCards];
+    const selectedCard = tarotDeck.find(card => card.name === cardName);
+
+    if(selectedCard){
+        newSelectedCards[index] = {
+          name: selectedCard.name,
+          orientation: "upright", // Default orientation
+        }
+        setSelectedCards(newSelectedCards);
+    } else {
+        //If no card is selected.
+        newSelectedCards[index] = null
+        setSelectedCards(newSelectedCards)
+    }
+
   };
 
+  const handleOrientationChange = (index, orientation) => {
+     const newSelectedCards = [...selectedCards];
+    if(!newSelectedCards[index]) return;
+
+    newSelectedCards[index] = {
+      ...newSelectedCards[index],
+      orientation: orientation,
+    };
+    setSelectedCards(newSelectedCards);
+  };
+
+  const handleAnalyzeClick = () => {
+    const cardsToAnalyze = selectedCards.filter(card=> card !== null).map((card) => ({
+        name: card.name,
+        orientation: card.orientation
+    }))
+
+    if (cardsToAnalyze.length === spread) {
+      onManualAnalyze(cardsToAnalyze);
+    } else {
+      alert(t("tarot_select_all_cards"));
+    }
+  };
+    const isAnalyzeDisabled = React.useMemo(() => {
+        return selectedCards.filter(card=> card !== null).length !== spread
+    }, [selectedCards, spread])
+
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {Array.from({ length: spread }).map((_, index) => (
+     <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {selectedCards.map((_, index) => (
           <div key={index} className="mb-4">
-            {/* Card Selection */}
+            <label
+              htmlFor={`card-select-${index}`}
+              className="block text-sm font-medium text-gray-300"
+            >
+              {t("tarot_card")} {index + 1}:
+            </label>
             <select
-              onChange={(e) => handleManualCardChange(index, "name", e.target.value)}
-              className="block w-full p-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800"
+              id={`card-select-${index}`}
+              value={selectedCards[index] ? selectedCards[index].name : ""}
+              onChange={(e) => handleCardChange(index, e.target.value)}
+              className="block w-full px-3 py-2 mt-1 text-gray-800 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             >
               <option value="">{t("tarot_select_card")}</option>
-              {tarotDeck.map((card) => (
-                <option key={card.name} value={card.name}>
-                  {i18n.language === "zh" ? card.nameZh : card.name}
+              {cardOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
                 </option>
               ))}
             </select>
 
-            {/* Card Orientation Selection */}
-            <select
-              onChange={(e) => handleManualCardChange(index, "orientation", e.target.value)}
-              className="mt-2 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800"
+            <label
+              htmlFor={`orientation-select-${index}`}
+              className="block mt-2 text-sm font-medium text-gray-300"
             >
-              <option value="upright">{t("tarot_upright")}</option>
-              <option value="reversed">{t("tarot_reversed")}</option>
+              {t("tarot_orientation")}:
+            </label>
+            <select
+              id={`orientation-select-${index}`}
+              value={selectedCards[index]?.orientation || "upright"}
+              onChange={(e) => handleOrientationChange(index, e.target.value)}
+              className="block w-full px-3 py-2 mt-1 text-gray-800 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              {orientationOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
         ))}
       </div>
-
-      <button onClick={() => analyzeDraw(manualCards)} className="mt-6 px-6 py-3 bg-green-500 text-white font-semibold rounded-md">
-        {t("tarot_analyze_draw")}
+      <button
+        onClick={handleAnalyzeClick}
+        className={`px-6 py-3 mt-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 ${
+          isAnalyzeDisabled ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        disabled={isAnalyzeDisabled}
+      >
+        {t("tarot_analyze")}
       </button>
-    </>
+    </div>
   );
 };
 
