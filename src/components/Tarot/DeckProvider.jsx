@@ -16,10 +16,12 @@ export const useDeck = () => {
 export const DeckProvider = ({ children }) => {
   const [tarotDeck, setTarotDeck] = useState([]);
   const [deckError, setDeckError] = useState(null);
+  const [deckLoading, setDeckLoading] = useState(true); // Add loading state
   const { t } = useTranslation();
 
   useEffect(() => {
     const loadDeck = async () => {
+      setDeckLoading(true); // Start loading
       try {
         const deck = await fetchTarotDeck();
         setTarotDeck(deck);
@@ -27,15 +29,21 @@ export const DeckProvider = ({ children }) => {
       } catch (error) {
         console.error("Error loading tarot deck:", error);
         setDeckError(t("tarot_deck_empty_error")); // Use translated error
+      } finally {
+        setDeckLoading(false); // End loading regardless of success/failure
       }
     };
+
     loadDeck();
   }, [t]);
 
   const value = {
     tarotDeck,
     deckError,
+    deckLoading, // Expose loading state
   };
 
-  return <DeckContext.Provider value={value}>{children}</DeckContext.Provider>;
+  return (
+    <DeckContext.Provider value={value}>{children}</DeckContext.Provider>
+  );
 };

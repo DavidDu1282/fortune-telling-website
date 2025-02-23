@@ -1,10 +1,9 @@
-// d:\OtherCodingProjects\fortune-telling-website\src\components\AuthForm.jsx
+// AuthForm.jsx
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
-// import i18n from '../i18n'; // Not used in provided code
-// import { useTranslation } from 'react-i18next'; // Not used in provided code
+import { useTranslation } from 'react-i18next';
 
 const AuthForm = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -15,13 +14,14 @@ const AuthForm = () => {
     const { login, loading } = useAuth(); // Get loading from AuthContext
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
         if (!isLogin && password !== confirmPassword) {
-            setError("Passwords do not match.");
+            setError(t("auth.passwords_not_match"));
             return;
         }
 
@@ -36,7 +36,7 @@ const AuthForm = () => {
                         setError(loginError); // Display login error
                     }
                 } else {
-                    setError(registrationResult.message || 'Registration failed');
+                    setError(registrationResult.message || t("auth.registration_failed"));
                 }
             } else {
                 const loginError = await login(username, password); // Get potential error
@@ -48,7 +48,7 @@ const AuthForm = () => {
             }
         } catch (err) {
             console.error("AuthForm handleSubmit Error:", err);
-            setError(err.message || 'An unexpected error occurred.');
+            setError(err.message || t("auth.unexpected_error"));
         }
     };
 
@@ -61,24 +61,24 @@ const AuthForm = () => {
                     className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
                 >
                     <h2 className="text-2xl font-bold mb-6 text-center">
-                        {isLogin ? 'Login' : 'Register'}
+                        {isLogin ? t("auth.login_title") : t("auth.register_title")}
                     </h2>
                     {error && (
                         <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                            <strong className="font-bold">Error:</strong>
+                            <strong className="font-bold">{t("auth.error")}:</strong>
                             <span className="block sm:inline"> {error}</span>
                         </div>
                     )}
 
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-                            Username
+                            {t("auth.username")}
                         </label>
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="username"
                             type="text"
-                            placeholder="Username"
+                            placeholder={t("auth.username")}
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
@@ -87,13 +87,13 @@ const AuthForm = () => {
                     {!isLogin && (
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                                Email
+                                {t("auth.email")}
                             </label>
                             <input
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 id="email"
                                 type="email"
-                                placeholder="Email"
+                                placeholder={t("auth.email")}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -102,13 +102,13 @@ const AuthForm = () => {
                     )}
                     <div className="mb-6">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                            Password
+                            {t("auth.password")}
                         </label>
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                             id="password"
                             type="password"
-                            placeholder="Password"
+                            placeholder={t("auth.password")}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -117,13 +117,13 @@ const AuthForm = () => {
                     {!isLogin && (
                         <div className="mb-6">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
-                                Confirm Password
+                                {t("auth.confirm_password")}
                             </label>
                             <input
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                                 id="confirmPassword"
                                 type="password"
-                                placeholder="Confirm Password"
+                                placeholder={t("auth.confirm_password")}
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
@@ -136,19 +136,19 @@ const AuthForm = () => {
                             type="submit"
                             disabled={loading}
                         >
-                            {loading ? (isLogin ? 'Logging in...' : 'Registering...') : (isLogin ? 'Login' : 'Register')}
+                            {loading ? (isLogin ? t("auth.logging_in") : t("auth.registering")) : (isLogin ? t("auth.login") : t("auth.register"))}
                         </button>
                         <button
                             type="button"
                             className="inline-block align-baseline font-bold text-sm text-purple-500 hover:text-purple-800"
                             onClick={() => setIsLogin(!isLogin)}
                         >
-                            {isLogin ? 'Create an account' : 'Already have an account?'}
+                            {isLogin ? t("auth.create_account") : t("auth.already_have_account")}
                         </button>
                     </div>
                 </form>
                 <p className="text-center text-gray-500 text-xs">
-                    &copy;{new Date().getFullYear()} Your Company Name. All rights reserved.
+                    &copy;{new Date().getFullYear()} {t("auth.copyright")}
                 </p>
             </div>
         </div>

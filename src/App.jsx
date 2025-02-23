@@ -51,9 +51,9 @@ const AppContent = () => {
             <Link to="/new-feature" className="text-white hover:underline">{t("new_feature")}</Link>
             <Link to="/counsellor" className="text-white hover:underline">{t("counsellor_title")}</Link>
            {isAuthenticated ? (
-              <button onClick={handleLogout} className="text-white hover:underline">Logout</button>
+              <button onClick={handleLogout} className="text-white hover:underline">{t("logout")}</button>
             ) : (
-              <Link to="/login" className="text-white hover:underline">Login</Link>
+              <Link to="/login" className="text-white hover:underline">{t("login")}</Link>
             )}
           </div>
           <LanguageSwitcher />

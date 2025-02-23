@@ -1,10 +1,14 @@
+// Home.jsx
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="text-center">
-      <h1 className="text-4xl font-bold">Welcome to Fortune Telling</h1>
-      <p className="mt-4 text-lg">Choose a feature from the navigation above.</p>
+      <h1 className="text-4xl font-bold">{t("home.welcome")}</h1>
+      <p className="mt-4 text-lg">{t("home.choose_feature")}</p>
     </div>
   );
 };

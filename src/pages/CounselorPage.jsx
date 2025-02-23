@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { useTranslation } from "react-i18next";
 
@@ -7,16 +7,81 @@ const CounsellorPage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL || "";
+  const recognition = useRef(null);
+  const [hasSpeechRecognition, setHasSpeechRecognition] = useState(false);
+  const [speechRecognitionError, setSpeechRecognitionError] = useState(null); // State to hold specific errors
+
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      setHasSpeechRecognition(true);
+      try {
+        recognition.current = new SpeechRecognition();
+        recognition.current.continuous = false;
+        recognition.current.interimResults = true;
+        recognition.current.lang = i18n.language;
+
+        recognition.current.onresult = (event) => {
+          const transcript = Array.from(event.results)
+            .map((result) => result[0].transcript)
+            .join("");
+          setInput(transcript);
+        };
+
+        recognition.current.onstart = () => {
+          setIsListening(true);
+          console.log("Speech recognition started"); // Debugging
+        };
+
+        recognition.current.onend = () => {
+          setIsListening(false);
+          console.log("Speech recognition ended"); // Debugging
+          return;
+        };
+
+        recognition.current.onerror = (event) => {
+          console.error("Speech recognition error:", event.error);
+          setSpeechRecognitionError(event.error); //Store the error.
+          setIsListening(false);
+          console.log("Speech recognition error:", event); // More detailed debug info
+
+          if (event.error === 'no-speech') {
+            console.warn("No speech was detected. Adjust microphone settings or speak louder.");
+          } else if (event.error === 'audio-capture') {
+            console.error("Audio capture failed. Check microphone permissions.");
+          } else if (event.error === 'not-allowed') {
+            console.error("Speech recognition access was denied. Check browser permissions.");
+          }
+
+        };
+      } catch (error) {
+        console.error("Error initializing SpeechRecognition:", error);
+        setHasSpeechRecognition(false);
+        setSpeechRecognitionError(error.message); // Store initialization error
+
+      }
+    } else {
+      console.warn("Speech Recognition API is not supported in this browser.");
+    }
+
+    return () => {
+      if (recognition.current) {
+        recognition.current.abort();
+      }
+    };
+  }, [i18n.language]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
-    
+
     const newMessages = [...messages, { text: input, sender: "user" }];
     setMessages(newMessages);
     setInput("");
     setLoading(true);
-    
+
     try {
       const response = await fetch(`${API_URL}/api/counsellor/chat`, {
         method: "POST",
@@ -27,13 +92,32 @@ const CounsellorPage = () => {
           language: i18n.language,
         }),
       });
-      
+
       const result = await response.json();
       setMessages([...newMessages, { text: result.response, sender: "ai" }]);
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const toggleListen = () => {
+    if (!recognition.current) return;
+
+    if (isListening) {
+      recognition.current.stop();
+      console.log("Stopping recognition"); //Debugging
+    } else {
+      setInput("");
+      try {
+        recognition.current.start();
+        console.log("Starting recognition"); //Debugging
+      } catch (error) {
+        console.error("Error starting recognition:", error);
+        setSpeechRecognitionError(error.message);  //Capture specific start error
+        setIsListening(false); // Ensure isListening is false if start fails
+      }
     }
   };
 
@@ -68,7 +152,27 @@ const CounsellorPage = () => {
           >
             {t("counsellor_send")}
           </button>
+
+          {hasSpeechRecognition && (
+            <button
+              onClick={toggleListen}
+              className={`ml-2 px-4 py-2 rounded-md ${
+                isListening ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
+              } text-white`}
+              disabled={loading}
+            >
+              {isListening ? t("counsellor_stop_listening") : t("counsellor_start_listening")}
+            </button>
+          )}
         </div>
+        {!hasSpeechRecognition && (
+          <p className="text-red-500 mt-2">{t("counsellor_speech_recognition_not_supported")}</p>
+        )}
+        {speechRecognitionError && (
+          <p className="text-red-500 mt-2">
+            {t("counsellor_speech_recognition_error")}: {speechRecognitionError}
+          </p>
+        )}
       </div>
     </div>
   );

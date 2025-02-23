@@ -1,28 +1,39 @@
 // src/components/Tarot/SpreadController.jsx
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import SpreadSelector from "./SpreadSelector"; // The original selector
-import { spreads } from "./Spreads";
+import { spreads } from "./Spreads"; // Ensure spreads.js contains translated labels
 
 export const SpreadController = ({ onSpreadChange, initialSpread = "three_card" }) => {
   const { i18n } = useTranslation();
   const [spreadKey, setSpreadKey] = useState(initialSpread);
 
-  const selectedSpread = useMemo(() => spreads[spreadKey], [spreadKey]);
+    const selectedSpread = useMemo(() => spreads[spreadKey], [spreadKey]);
     const localizedSpreadLabel = useMemo(() => {
-        return selectedSpread.label[i18n.language];
+        return selectedSpread?.label[i18n.language] || selectedSpread?.label["en"];
     }, [selectedSpread, i18n.language])
 
-    React.useEffect(() => {
-      if(onSpreadChange){
-        onSpreadChange(selectedSpread)
-      }
-    }, [selectedSpread, onSpreadChange])
+    useEffect(() => {
+        if (onSpreadChange) {
+            onSpreadChange(selectedSpread);
+        }
+    }, [selectedSpread, onSpreadChange]);
 
   return (
-    <SpreadSelector
-      spread={localizedSpreadLabel}
-      setSpread={setSpreadKey}
-    />
+    <div className="mb-4">
+      <label className="block text-lg font-semibold mb-2">
+        {localizedSpreadLabel}
+      </label>
+      <select
+        value={spreadKey}
+        onChange={(e) => setSpreadKey(e.target.value)}
+        className="block w-full p-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800"
+      >
+        {Object.entries(spreads).map(([key, value]) => (
+          <option key={key} value={key}>
+            {value.label[i18n.language] || value.label["en"]}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 };

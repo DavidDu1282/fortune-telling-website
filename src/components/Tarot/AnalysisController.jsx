@@ -32,16 +32,15 @@ export const AnalysisController = ({
             const token = localStorage.getItem('accessToken');
 
             // Set the access_token cookie
-            document.cookie = `access_token=${token}; path=/; secure; httponly`;
+            // document.cookie = `access_token=${token}; path=/; secure; httponly`;
 
             const response = await fetch(
                 `${import.meta.env.VITE_API_URL || ""}/api/tarot/analyze`,
                 {
                     method: "POST",
+                    credentials: "include",
                     headers: {
                         "Content-Type": "application/json",
-                        // Remove authorization header
-                        //'Authorization': `Bearer ${token}`, //  REMOVED - We're using cookies now!
                     },
                     body: JSON.stringify(requestBody),
                 }

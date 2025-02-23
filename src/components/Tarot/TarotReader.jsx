@@ -4,12 +4,14 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import Header from "./Header";
 import QuestionInput from "./QuestionInput";
-import { DeckProvider } from "./DeckProvider";
+import { useDeck } from "./DeckProvider"; // Import useDeck - Keep this import
+import { DeckProvider } from "./DeckProvider"; //Ensure DeckProvider is imported
 import { SpreadController } from "./SpreadController";
 import { CardDrawer } from "./CardDrawer";
 import { AnalysisController } from "./AnalysisController";
 import ManualCardInput from "./ManualCardInput"; // Import ManualCardInput
 import { v4 as uuidv4 } from 'uuid';
+import DeckStatus from './DeckStatus';  // Import new component
 
 const TarotReader = () => {
   const { t } = useTranslation();
@@ -19,13 +21,14 @@ const TarotReader = () => {
   const [selectedSpread, setSelectedSpread] = useState(null);
   const [drawnCards, setDrawnCards] = useState([]); // Holds drawn cards (both auto and manual)
 
-    const handleDrawComplete = useCallback((cards) => {
-        setDrawnCards(cards);
-    }, []);
 
-    const handleManualAnalyze = useCallback((selectedCards) => {
-        setDrawnCards(selectedCards)
-    }, [])
+  const handleDrawComplete = useCallback((cards) => {
+    setDrawnCards(cards);
+  }, []);
+
+  const handleManualAnalyze = useCallback((selectedCards) => {
+    setDrawnCards(selectedCards);
+  }, []);
 
   return (
     <HelmetProvider>
@@ -52,26 +55,28 @@ const TarotReader = () => {
           </div>
 
           <DeckProvider>
-            {manualMode ? (
-              <ManualCardInput
-                spread={selectedSpread?.count}
-                onManualAnalyze={handleManualAnalyze}
-              />
-            ) : (
-              selectedSpread && (
-                <CardDrawer
-                  spread={selectedSpread}
-                  onDrawComplete={handleDrawComplete}
+            <DeckStatus>
+              {manualMode ? (
+                <ManualCardInput
+                  spread={selectedSpread?.count}
+                  onManualAnalyze={handleManualAnalyze}
                 />
-              )
-            )}
-            <AnalysisController
-              sessionId={sessionId}
-              selectedSpread={selectedSpread}
-              context={context}
-              drawnCards={drawnCards}
-              analyzeImmediately={true}
-            />
+              ) : (
+                selectedSpread && (
+                  <CardDrawer
+                    spread={selectedSpread}
+                    onDrawComplete={handleDrawComplete}
+                  />
+                )
+              )}
+              <AnalysisController
+                sessionId={sessionId}
+                selectedSpread={selectedSpread}
+                context={context}
+                drawnCards={drawnCards}
+                analyzeImmediately={true}
+              />
+            </DeckStatus>
           </DeckProvider>
         </div>
       </div>

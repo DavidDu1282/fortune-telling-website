@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { spreads } from "./Spreads"; // Ensure spreads.js contains translated labels
+import { spreads } from "../Spreads"; // Ensure spreads.js contains translated labels
 
 const SpreadSelector = ({ spread, setSpread }) => {
   const { i18n } = useTranslation(); // Get current language
