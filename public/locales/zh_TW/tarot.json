@@ -1,0 +1,13 @@
+{
+  "title": "塔羅牌閱讀器",
+  "choose_spread": "選擇牌陣：",
+  "enter_question": "輸入你的問題：",
+  "draw_cards": "抽取卡牌",
+  "analyze_draw": "分析牌陣",
+  "switch_language": "切換語言",
+  "switch_to_auto": "切換到自動抽牌",
+  "switch_to_manual": "切換到手動輸入",
+  "select_card": "選擇卡牌",
+  "upright": "正位",
+  "reversed": "逆位"
+}

@@ -29,7 +29,7 @@ const AnalysisButton = ({
       onClick={handleAnalyze}
       className="px-6 py-3 bg-green-500 text-white font-bold rounded-md"
     >
-      {t("tarot_analyze_draw")}
+      {t("analyze_draw")}
     </button>
   );
 };

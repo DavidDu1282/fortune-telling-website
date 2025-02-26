@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { useTranslation } from "react-i18next";
 
 const CounsellorPage = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("counsellor");
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -125,7 +125,7 @@ const CounsellorPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-800 to-blue-700 text-gray-100 p-6">
       <div className="container mx-auto max-w-2xl bg-white shadow-lg rounded-lg p-6 text-gray-900">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold text-gray-800">{t("counsellor_title")}</h1>
+          <h1 className="text-2xl font-bold text-gray-800">{t("title")}</h1>
         </div>
 
         <div className="chat-container overflow-auto max-h-[400px] border p-3 rounded-md bg-gray-100">
@@ -134,7 +134,7 @@ const CounsellorPage = () => {
               <ReactMarkdown>{msg.text}</ReactMarkdown>
             </div>
           ))}
-          {loading && <p className="text-gray-500">{t("counsellor_thinking")}</p>}
+          {loading && <p className="text-gray-500">{t("thinking")}</p>}
         </div>
 
         <div className="flex mt-4">
@@ -143,14 +143,14 @@ const CounsellorPage = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             className="flex-grow p-2 border rounded-md bg-gray-200 text-gray-900"
-            placeholder={t("counsellor_input_placeholder")}
+            placeholder={t("input_placeholder")}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
           <button
             onClick={sendMessage}
             className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
           >
-            {t("counsellor_send")}
+            {t("send")}
           </button>
 
           {hasSpeechRecognition && (
@@ -161,16 +161,16 @@ const CounsellorPage = () => {
               } text-white`}
               disabled={loading}
             >
-              {isListening ? t("counsellor_stop_listening") : t("counsellor_start_listening")}
+              {isListening ? t("stop_listening") : t("start_listening")}
             </button>
           )}
         </div>
         {!hasSpeechRecognition && (
-          <p className="text-red-500 mt-2">{t("counsellor_speech_recognition_not_supported")}</p>
+          <p className="text-red-500 mt-2">{t("speech_recognition_not_supported")}</p>
         )}
         {speechRecognitionError && (
           <p className="text-red-500 mt-2">
-            {t("counsellor_speech_recognition_error")}: {speechRecognitionError}
+            {t("speech_recognition_error")}: {speechRecognitionError}
           </p>
         )}
       </div>

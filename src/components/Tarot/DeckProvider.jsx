@@ -28,7 +28,7 @@ export const DeckProvider = ({ children }) => {
         setDeckError(null);
       } catch (error) {
         console.error("Error loading tarot deck:", error);
-        setDeckError(t("tarot_deck_empty_error")); // Use translated error
+        setDeckError(t("deck_empty_error")); // Use translated error
       } finally {
         setDeckLoading(false); // End loading regardless of success/failure
       }

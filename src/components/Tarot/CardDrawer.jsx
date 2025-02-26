@@ -10,11 +10,11 @@ export const CardDrawer = ({ spread, onDrawComplete }) => {
   const { tarotDeck } = useDeck();
   const [drawnCards, setDrawnCards] = useState([]);
   const [revealedCards, setRevealedCards] = useState([]);
-  const { t } = useTranslation();
+  const { t } = useTranslation("tarot");
 
   const drawCards = useCallback(async () => {
       if (!tarotDeck.length) {
-          alert(t("tarot_deck_empty_error"));
+          alert(t("deck_empty_error"));
           return;
       }
 
@@ -49,7 +49,7 @@ export const CardDrawer = ({ spread, onDrawComplete }) => {
         onClick={drawCards}
         className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
       >
-        {t("tarot_draw_cards")}
+        {t("draw_cards")}
       </button>
       <CardDisplay drawnCards={drawnCards} revealedCards={revealedCards} />
     </>

@@ -7,7 +7,7 @@ const ManualCardInput = ({
   spread, // This is the *number* of cards
   onManualAnalyze,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("tarot");
   const { tarotDeck } = useDeck();
 
   const [selectedCards, setSelectedCards] = useState(Array(spread).fill(null));
@@ -21,8 +21,8 @@ const ManualCardInput = ({
     }, [tarotDeck]);
 
   const orientationOptions = [
-    { value: "upright", label: t("tarot_upright") },
-    { value: "reversed", label: t("tarot_reversed") },
+    { value: "upright", label: t("upright") },
+    { value: "reversed", label: t("reversed") },
   ];
 
     useEffect(() => {
@@ -68,7 +68,7 @@ const ManualCardInput = ({
     if (cardsToAnalyze.length === spread) {
       onManualAnalyze(cardsToAnalyze);
     } else {
-      alert(t("tarot_select_all_cards"));
+      alert(t("select_all_cards"));
     }
   };
     const isAnalyzeDisabled = React.useMemo(() => {
@@ -84,7 +84,7 @@ const ManualCardInput = ({
               htmlFor={`card-select-${index}`}
               className="block text-sm font-medium text-gray-300"
             >
-              {t("tarot_card")} {index + 1}:
+              {t("card")} {index + 1}:
             </label>
             <select
               id={`card-select-${index}`}
@@ -92,7 +92,7 @@ const ManualCardInput = ({
               onChange={(e) => handleCardChange(index, e.target.value)}
               className="block w-full px-3 py-2 mt-1 text-gray-800 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             >
-              <option value="">{t("tarot_select_card")}</option>
+              <option value="">{t("select_card")}</option>
               {cardOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -104,7 +104,7 @@ const ManualCardInput = ({
               htmlFor={`orientation-select-${index}`}
               className="block mt-2 text-sm font-medium text-gray-300"
             >
-              {t("tarot_orientation")}:
+              {t("orientation")}:
             </label>
             <select
               id={`orientation-select-${index}`}
@@ -128,7 +128,7 @@ const ManualCardInput = ({
         }`}
         disabled={isAnalyzeDisabled}
       >
-        {t("tarot_analyze")}
+        {t("analyze")}
       </button>
     </div>
   );

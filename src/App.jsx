@@ -28,7 +28,7 @@ const App = () => {
 
 
 const AppContent = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("routes_titles");
   const { isAuthenticated, logout, loading } = useAuth();
 
     // Function to handle logout with error handling
@@ -48,7 +48,7 @@ const AppContent = () => {
           <div className="flex space-x-6">
             <Link to="/" className="text-white hover:underline">{t("home")}</Link>
             <Link to="/tarot" className="text-white hover:underline">{t("tarot_title")}</Link>
-            <Link to="/new-feature" className="text-white hover:underline">{t("new_feature")}</Link>
+            {/* <Link to="/new-feature" className="text-white hover:underline">{t("new_feature")}</Link> */}
             <Link to="/counsellor" className="text-white hover:underline">{t("counsellor_title")}</Link>
            {isAuthenticated ? (
               <button onClick={handleLogout} className="text-white hover:underline">{t("logout")}</button>
@@ -62,12 +62,12 @@ const AppContent = () => {
         {/* Page Content */}
         <div className="container mx-auto p-6">
         {loading ? (
-          <div>Loading...</div> // Show loading indicator while checking auth
+          <div>Loading...</div> 
         ) : (
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<AuthForm />} /> {/* Use AuthForm */}
-            {/* Example of a protected route */}
+            <Route path="/login" element={<AuthForm />} />
+            
             <Route
               path="/tarot"
               element={
@@ -76,7 +76,7 @@ const AppContent = () => {
                 </ProtectedRoute>
               }
             />
-            <Route path="/new-feature" element={<NewFeature />} />
+            {/* <Route path="/new-feature" element={<NewFeature />} /> */}
             <Route
               path="/counsellor"
               element={

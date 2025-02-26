@@ -1,4 +1,4 @@
-// d:\OtherCodingProjects\fortune-telling-website\src\services\authService.js
+// d:\OtherCodingProjects\fortune-telling-website\src\services/authService.js
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode'; // CORRECT: Use named import
 
@@ -34,7 +34,7 @@ api.interceptors.response.use(
         const originalRequest = error.config;
 
         // If the error is 401 (Unauthorized) and we haven't already tried to refresh
-        if (error.response.status === 401 && !originalRequest._retry) {
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true; // Prevent infinite loops
             try {
                 const refreshToken = localStorage.getItem('refreshToken');
@@ -76,11 +76,22 @@ const authService = {
             return response.data; // Return the whole response data
         } catch (error) {
             console.error("Registration error:", error);
-            return error.response.data; //return the error
+            // Handle validation errors from the backend (Pydantic)
+            if (error.response && error.response.status === 422 && error.response.data && Array.isArray(error.response.data.detail)) {
+                // Extract error messages and locations
+                const validationErrors = error.response.data.detail.map(err => ({
+                    message: err.msg,
+                    field: err.loc[0], // Assuming the field is always the first element in the 'loc' array
+                    msg: err.msg  // Add the original message here
+                }));
+                return { success: false, validationErrors: validationErrors };
+            }
+            // General error handling
+            return { success: false, message: error.response?.data?.message || "Registration failed" };
         }
     },
     async login(username, password) {
-        try {
+       try {
             const response = await api.post('/login', { username, password });
             return response.data; // Return the whole response data
         } catch (error) {
@@ -89,7 +100,7 @@ const authService = {
         }
     },
     async logout() {
-        try {
+       try {
             const response = await api.post('/logout');
             return response.data; // Return the whole response data
         } catch (error) {
@@ -98,7 +109,7 @@ const authService = {
         }
     },
     async checkAuth() {  //Not needed anymore, it's handled in AuthContext
-        try {
+       try {
             const response = await api.get('/check-auth'); //check-auth should return the user
             return response.data;  // Send back to context
         } catch (error) {
