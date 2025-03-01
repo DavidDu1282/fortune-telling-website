@@ -1,0 +1,13 @@
+{
+  "title": "Tarot Reader",
+  "choose_spread": "Choose a spread:",
+  "enter_question": "Enter your question:",
+  "draw_cards": "Draw Cards",
+  "analyze_draw": "Analyze Draw",
+  "switch_language": "Switch Language",
+  "switch_to_auto": "Switch to Auto Draw",
+  "switch_to_manual": "Switch to Manual Input",
+  "select_card": "Select Card",
+  "upright": "Upright",
+  "reversed": "Reversed"
+}
