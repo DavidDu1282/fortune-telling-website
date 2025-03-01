@@ -1,5 +1,5 @@
 // src/components/Tarot/AnalysisController.jsx
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import AnalysisResults from "./AnalysisResults";
 import LoadingIndicator from "./LoadingIndicator";
@@ -21,18 +21,18 @@ export const AnalysisController = ({
         setLoading(true);
         setAnalysisError(null); // Reset error state
         try {
+            // Determine the spread label, defaulting to "en"
+            const spreadLabel = selectedSpread.label[i18n.language] || selectedSpread.label["en"];
+
             const requestBody = {
                 session_id: sessionId,
-                spread: selectedSpread.label[i18n.language],
+                spread: spreadLabel,  // Use the determined spread label
                 tarot_cards: cardsToAnalyze,
                 user_context: context,
-                language: i18n.language,
+                language: i18n.language, // Still send the original language code to the backend
             };
             console.log("Sending API Request:", requestBody);
             const token = localStorage.getItem('accessToken');
-
-            // Set the access_token cookie
-            // document.cookie = `access_token=${token}; path=/; secure; httponly`;
 
             const response = await fetch(
                 `${import.meta.env.VITE_API_URL || ""}/api/tarot/analyze`,
@@ -62,7 +62,7 @@ export const AnalysisController = ({
         }
     }, [sessionId, selectedSpread, context, i18n.language]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (analyzeImmediately && drawnCards.length > 0) {
             analyzeDraw(drawnCards.map((card) => ({
                 name: card.name,
