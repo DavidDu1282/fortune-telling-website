@@ -2718,6 +2718,7 @@ __metadata:
     i18next: "npm:^24.2.2"
     i18next-browser-languagedetector: "npm:^8.0.4"
     i18next-http-backend: "npm:^3.0.2"
+    js-cookie: "npm:^3.0.5"
     jwt-decode: "npm:^4.0.0"
     lottie-react: "npm:^2.4.0"
     postcss: "npm:^8.4.49"
@@ -3503,6 +3504,13 @@ __metadata:
   bin:
     jiti: bin/jiti.js
   checksum: 10c0/77b61989c758ff32407cdae8ddc77f85e18e1a13fc4977110dbd2e05fc761842f5f71bce684d9a01316e1c4263971315a111385759951080bbfe17cbb5de8f7a
+  languageName: node
+  linkType: hard
+
+"js-cookie@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "js-cookie@npm:3.0.5"
+  checksum: 10c0/04a0e560407b4489daac3a63e231d35f4e86f78bff9d792011391b49c59f721b513411cd75714c418049c8dc9750b20fcddad1ca5a2ca616c3aca4874cce5b3a
   languageName: node
   linkType: hard
 

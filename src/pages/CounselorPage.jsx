@@ -85,21 +85,44 @@ const CounsellorPage = () => {
     try {
       const response = await fetch(`${API_URL}/api/counsellor/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          session_id: "unique-session-id",
+          session_id: "unique-session-id", //  Replace this! See notes below
           message: input,
           language: i18n.language,
         }),
       });
 
-      const result = await response.json();
+      if (!response.ok) {
+        const errorData = await response.json();
+
+        let errorMessage = t("error_sending_message");
+        if (response.status === 401) {
+            errorMessage = t("not_logged_in");
+        }
+
+        throw new Error(`Server error: ${response.status} - ${errorData.message || 'Unknown error'}`);
+      }
+
+      const result = await response.json();  // Check for null or undefined result *before* accessing properties.
+
+      // Add a check for result being null or not having a 'response' property:
+      if (result && result.response) {
       setMessages([...newMessages, { text: result.response, sender: "ai" }]);
-    } catch (error) {
+    } else {
+        // Handle the case where the response is malformed
+        console.error("Invalid response from server:", result);
+        setMessages([...newMessages, { text: t("invalid_response"), sender: "ai" }]); // Display appropriate error message
+      }
+      } catch (error) {
       console.error("Error sending message:", error);
+      setMessages([...newMessages, { text: error.message, sender: "ai" }]);
     } finally {
       setLoading(false);
-    }
+      }
   };
 
   const toggleListen = () => {
@@ -107,19 +130,19 @@ const CounsellorPage = () => {
 
     if (isListening) {
       recognition.current.stop();
-      console.log("Stopping recognition"); //Debugging
+      console.log("Stopping recognition");
     } else {
       setInput("");
       try {
         recognition.current.start();
-        console.log("Starting recognition"); //Debugging
+        console.log("Starting recognition");
       } catch (error) {
         console.error("Error starting recognition:", error);
-        setSpeechRecognitionError(error.message);  //Capture specific start error
-        setIsListening(false); // Ensure isListening is false if start fails
+        setSpeechRecognitionError(error.message);
+        setIsListening(false);
       }
     }
-  };
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-800 to-blue-700 text-gray-100 p-6">

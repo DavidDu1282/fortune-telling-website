@@ -1,5 +1,5 @@
 // src/components/Tarot/AnalysisController.jsx
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react"; // import useRef
 import { useTranslation } from "react-i18next";
 import AnalysisResults from "./AnalysisResults";
 import LoadingIndicator from "./LoadingIndicator";
@@ -17,19 +17,26 @@ export const AnalysisController = ({
     const [loading, setLoading] = useState(false);
     const [analysisError, setAnalysisError] = useState(null);
 
+    // useRef to persist the language
+    const currentLanguage = useRef(i18n.language);
+
+    useEffect(() => {
+        currentLanguage.current = i18n.language;
+    }, [i18n.language]);
+
     const analyzeDraw = useCallback(async (cardsToAnalyze) => {
         setLoading(true);
         setAnalysisError(null); // Reset error state
         try {
             // Determine the spread label, defaulting to "en"
-            const spreadLabel = selectedSpread.label[i18n.language] || selectedSpread.label["en"];
+            const spreadLabel = selectedSpread.label[currentLanguage.current] || selectedSpread.label["en"];
 
             const requestBody = {
                 session_id: sessionId,
                 spread: spreadLabel,  // Use the determined spread label
                 tarot_cards: cardsToAnalyze,
                 user_context: context,
-                language: i18n.language, // Still send the original language code to the backend
+                language: currentLanguage.current, // Still send the original language code to the backend
             };
             console.log("Sending API Request:", requestBody);
             const token = localStorage.getItem('accessToken');
@@ -60,7 +67,7 @@ export const AnalysisController = ({
         } finally {
             setLoading(false);
         }
-    }, [sessionId, selectedSpread, context, i18n.language]);
+    }, [sessionId, selectedSpread, context]); // i18n.language removed from dependencies
 
     useEffect(() => {
         if (analyzeImmediately && drawnCards.length > 0) {

@@ -5,99 +5,110 @@ import authService from '../services/authService';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-    const getTokens = () => {
-        const accessToken = localStorage.getItem('accessToken');
-        const refreshToken = localStorage.getItem('refreshToken');
-        return { accessToken, refreshToken };
-    };
-
-    useEffect(() => {
-        const checkAuthStatus = async () => {
-            setLoading(true);
-            try {
-                const { accessToken, refreshToken } = getTokens();
-                if (accessToken) {
-                    // Use the NOW IMPLEMENTED decodeToken function
-                    const user = authService.decodeToken(accessToken);
-                    if (user) { // Check if decoding was successful
-                        setUser(user);
-                        setIsAuthenticated(true);
-                    } else {
-                        // Token was invalid, clear it
-                        localStorage.removeItem('accessToken');
-                        localStorage.removeItem('refreshToken');
-                    }
-                }
-            } catch (error) {
-                console.error("Error checking auth status:", error);
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-            } finally {
-                setUser(null); // Always clear user if there was an error
-                setIsAuthenticated(false);
-                setLoading(false);
-            }
-        };
-
-        checkAuthStatus();
-    }, []);
+  // Helper function to get cookies (more robust than document.cookie directly)
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  };
 
 
-    const login = async (username, password) => {
-        try {
-            const result = await authService.login(username, password);
-            console.log("AuthContext login result:", result);
-            if (result.success) {
-                localStorage.setItem('accessToken', result.access_token);
-                localStorage.setItem('refreshToken', result.refresh_token);
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      setLoading(true);
+      try {
+        // Check auth status by calling the /check-auth endpoint
+        const response = await authService.checkAuth();
 
-                const user = authService.decodeToken(result.access_token);
-                setUser(user);
-                setIsAuthenticated(true);
-                return null; // Success
-
-            } else {
-                throw new Error(result.message); // Throw error from authService
-            }
-        } catch (error) {
-            console.error("AuthContext login Error:", error);
-            // Return the error message from the error object, or a default message
-            return error.message || 'An unexpected error occurred.';
+        if (response.success) {
+          setUser({ username: response.username, email: response.email }); // Set user data
+          setIsAuthenticated(true);
+        } else {
+          // If checkAuth fails, consider the user not authenticated
+          setUser(null);
+          setIsAuthenticated(false);
         }
+      } catch (error) {
+        console.error("Error checking auth status:", error);
+        // Even if there's an error (e.g., network issue), clear user data
+        setUser(null);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const logout = async () => {
-        try {
-            const result = await authService.logout();
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
+    checkAuthStatus();
+  }, []);
+
+  const login = async (username, password) => {
+    try {
+      const result = await authService.login(username, password);
+      console.log("AuthContext login result:", result);
+
+      if (result.success) {
+        // No need to set local storage, cookies are handled by the server
+        // Instead, immediately check auth to get the user details from the server.
+        const checkAuthResponse = await authService.checkAuth();
+        if (checkAuthResponse.success) {
+          setUser({username: checkAuthResponse.username, email: checkAuthResponse.email});
+          setIsAuthenticated(true);
+        } else {
+            //this handles a case where the login succeeds in setting a token,
+            //but on checking the newly set token the user is not found.
             setUser(null);
             setIsAuthenticated(false);
-            return null; // Success
-        } catch (error) {
-            console.error("Logout error:", error);
-            return error.message || 'An unexpected error occurred.'; // Return error message
+            return "Error checking user details.";
         }
-    };
+        
+        return null; // Success
+      } else {
+        throw new Error(result.message); // Throw error from authService
+      }
+    } catch (error) {
+      console.error("AuthContext login Error:", error);
+      return error.message || 'An unexpected error occurred.';
+    }
+  };
 
-    const authContextValue = {
-        user,
-        isAuthenticated,
-        login,
-        logout,
-        loading,
-        getTokens
-    };
+  const logout = async () => {
+    try {
+      const result = await authService.logout();
+      // No need to remove from local storage, server deletes cookies
+      setUser(null);
+      setIsAuthenticated(false);
+      return null; // Success
+    } catch (error) {
+      console.error("Logout error:", error);
+      return error.message || 'An unexpected error occurred.';
+    }
+  };
+    
+  //No longer required.
+  // const getTokens = () => {
+  //   const accessToken = getCookie('access_token');
+  //   const refreshToken = getCookie('refresh_token');
+  //   return { accessToken, refreshToken };
+  // };
 
-    return (
-        <AuthContext.Provider value={authContextValue}>
-            {children}
-        </AuthContext.Provider>
-    );
+  const authContextValue = {
+    user,
+    isAuthenticated,
+    login,
+    logout,
+    loading,
+    // getTokens // Removed get tokens.
+  };
+
+  return (
+    <AuthContext.Provider value={authContextValue}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);
