@@ -9,5 +9,10 @@
   "switch_to_manual": "切換到手動輸入",
   "select_card": "選擇卡牌",
   "upright": "正位",
-  "reversed": "逆位"
+  "reversed": "逆位",
+  "questionLabel": "輸入你的問題:",
+  "questionPlaceholder": "例如: 我會在事業上成功嗎?",
+  "noQuestionAlert": "請在產生解讀前輸入一個問題。",
+  "generateReadingButton": "產生解讀",
+  "resetButton": "重設"
 }

@@ -9,5 +9,10 @@
   "switch_to_manual": "Switch to Manual Input",
   "select_card": "Select Card",
   "upright": "Upright",
-  "reversed": "Reversed"
+  "reversed": "Reversed",
+  "questionLabel": "Enter your question:",
+  "questionPlaceholder": "e.g., Will I succeed in my career?",
+  "noQuestionAlert": "Please enter a question before generating a reading.",
+  "generateReadingButton": "Generate Reading",
+  "resetButton": "Reset"
 }

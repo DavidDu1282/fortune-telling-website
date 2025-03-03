@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from 'react-i18next';
 
 const Home = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("home");
 
   return (
     <div className="text-center">

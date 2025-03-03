@@ -6,10 +6,11 @@ import Home from "./pages/Home";
 import TarotPage from "./pages/TarotPage";
 import NewFeature from "./pages/NewFeature";
 import LanguageSwitcher from "./components/LanguageSwitcher";
-import CounsellorPage from "./pages/CounselorPage";
+import CounsellorPage from "./pages/CounsellorPage";
 import AuthForm from "./components/AuthForm"; // Import the AuthForm component
 import { AuthProvider, useAuth } from "./context/AuthContext"; // Import AuthProvider and useAuth
 import ProtectedRoute from "./components/ProtectedRoute"; // Import ProtectedRoute
+import { Helmet, HelmetProvider } from "react-helmet-async"; // Import in App.jsx
 
 
 const App = () => {
@@ -19,7 +20,9 @@ const App = () => {
   return (
     <Router>
       <AuthProvider> {/* Wrap the entire app with AuthProvider */}
+        <HelmetProvider>
         <AppContent />
+        </HelmetProvider>
       </AuthProvider>
     </Router>
   );
@@ -46,14 +49,14 @@ const AppContent = () => {
         {/* Navigation Bar */}
         <nav className="flex justify-between items-center p-4 bg-gray-800 shadow-lg">
           <div className="flex space-x-6">
-            <Link to="/" className="text-white hover:underline">{t("home")}</Link>
+            <Link to="/" className="text-white hover:underline">{t("home_title")}</Link>
             <Link to="/tarot" className="text-white hover:underline">{t("tarot_title")}</Link>
             {/* <Link to="/new-feature" className="text-white hover:underline">{t("new_feature")}</Link> */}
             <Link to="/counsellor" className="text-white hover:underline">{t("counsellor_title")}</Link>
            {isAuthenticated ? (
-              <button onClick={handleLogout} className="text-white hover:underline">{t("logout")}</button>
+              <button onClick={handleLogout} className="text-white hover:underline">{t("logout_title")}</button>
             ) : (
-              <Link to="/login" className="text-white hover:underline">{t("login")}</Link>
+              <Link to="/login" className="text-white hover:underline">{t("login_title")}</Link>
             )}
           </div>
           <LanguageSwitcher />
@@ -61,17 +64,31 @@ const AppContent = () => {
 
         {/* Page Content */}
         <div className="container mx-auto p-6">
+
         {loading ? (
-          <div>Loading...</div> 
+          <div>Loading...</div>
         ) : (
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<AuthForm />} />
-            
+              <Route
+                path="/"
+                element={
+                  <>
+                    <Helmet>
+                      <title>{t("home_title") || "My Default App Title"}</title> {/* Fallback title */}
+                    </Helmet>
+                    <Home />
+                  </>
+                }
+              />
+            <Route path="/login" element={<><Helmet><title>{t("login_title")}</title></Helmet><AuthForm /></>} />
+
             <Route
               path="/tarot"
               element={
                 <ProtectedRoute>
+                  <Helmet>
+                    <title>{t("tarot_title")}</title>
+                  </Helmet>
                   <TarotPage />
                 </ProtectedRoute>
               }
@@ -81,6 +98,9 @@ const AppContent = () => {
               path="/counsellor"
               element={
                 <ProtectedRoute>
+                   <Helmet>
+                    <title>{t("counsellor_title")}</title>
+                  </Helmet>
                   <CounsellorPage />
                 </ProtectedRoute>
               }

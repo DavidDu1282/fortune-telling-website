@@ -1,8 +1,8 @@
 {
-    "home": "Home",
+    "home_title": "Home",
     "tarot_title": "Tarot",
     "new_feature": "New Feature",
     "counsellor_title": "Counsellor",
-    "login": "Login",
-    "logout": "Logout"
+    "login_title": "Login",
+    "logout_title": "Logout"
 }

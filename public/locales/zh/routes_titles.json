@@ -1,8 +1,8 @@
 {
-    "home": "首页",
+    "home_title": "首页",
     "tarot_title": "塔罗牌",
     "new_feature": "新功能",
     "counsellor_title": "咨询师",
-    "login": "登录",
-    "logout": "登出"
+    "login_title": "登录",
+    "logout_title": "登出"
 }
