@@ -1,8 +1,7 @@
 // src/api/tarotApi.js
 const API_URL = import.meta.env.VITE_API_URL || "";
 
-export const analyzeDraw = async (drawnCards, spread, context, sessionId, language) => { // Added language
-
+export const analyzeDraw = async (drawnCards, spread, context, sessionId, language, updateCallback) => {
   const selectedCards = drawnCards.map((card) => ({
     name: card.name,
     orientation: card.orientation,
@@ -18,19 +17,39 @@ export const analyzeDraw = async (drawnCards, spread, context, sessionId, langua
         spread: spread,
         tarot_cards: selectedCards,
         user_context: context,
-        language: language // Include language
+        language: language
       }),
     });
 
     if (!response.ok) {
-      // Improved error handling (consistent with hook)
-      const errorData = await response.json(); // Try to get JSON error
-      throw new Error(`API Error: ${response.status} - ${errorData.message || 'Unknown error'}`);
+      const errorData = await response.json();
+      throw new Error(`API Error: ${response.status} - ${errorData.detail || 'Unknown error'}`);
     }
 
-    return await response.json();
+    if (!response.body) {
+        throw new Error("ReadableStream not supported in this browser.");
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let isDone = false;
+
+    while (!isDone) {
+        const { value, done } = await reader.read();
+        isDone = done;
+        if (value) {
+            const decodedChunk = decoder.decode(value, { stream: !done });
+            if (updateCallback) {
+                updateCallback(decodedChunk);
+            }
+        }
+    }
+
   } catch (error) {
     console.error("Error analyzing tarot draw:", error);
-    throw error; // Re-throw for consistent handling
+    if (updateCallback) {
+      updateCallback(`Error: ${error.message}`);
+    }
+    throw error;
   }
 };

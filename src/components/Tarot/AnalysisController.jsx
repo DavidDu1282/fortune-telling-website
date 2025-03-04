@@ -1,5 +1,5 @@
 // src/components/Tarot/AnalysisController.jsx
-import React, { useEffect } from "react"; // No longer need useState here
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import AnalysisResults from "./AnalysisResults";
 import LoadingIndicator from "../LoadingIndicator";
@@ -10,8 +10,8 @@ export const AnalysisController = ({
     selectedSpread,
     context,
     drawnCards,
-    analysisTriggered,    // Received as prop
-    setAnalysisTriggered, // Received as prop
+    analysisTriggered,
+    setAnalysisTriggered,
 }) => {
     const { t } = useTranslation("tarot");
     const { response, detailedAnalysis, loading, error, fetchAnalysis } = useTarotAnalysis();
@@ -19,9 +19,9 @@ export const AnalysisController = ({
     useEffect(() => {
         if (drawnCards.length > 0 && selectedSpread && !analysisTriggered) {
             fetchAnalysis(sessionId, selectedSpread, context, drawnCards);
-            setAnalysisTriggered(true); // Now updates the parent's state
+            setAnalysisTriggered(true);
         }
-    }, [drawnCards, selectedSpread, sessionId, context, fetchAnalysis, analysisTriggered, setAnalysisTriggered]); // Add setAnalysisTriggered to dependency array.
+    }, [drawnCards, selectedSpread, sessionId, context, fetchAnalysis, analysisTriggered, setAnalysisTriggered]);
 
     return (
         <>
