@@ -1,5 +1,5 @@
 import React from "react";
-import { analyzeDraw } from "./api";
+import { analyzeDraw } from "../Tarot/api";
 
 const AnalysisButton = ({
   drawnCards,

@@ -11,8 +11,8 @@ i18n
   .init({
     fallbackLng: "en",
     debug: true, // Set to false in production
-    ns: ['tarot', 'counsellor', 'auth', 'home'], // Add your namespaces here
-    defaultNS: 'home', // Default namespace if none specified
+    ns: ['tarot', 'counsellor', 'auth', 'home', 'routes_titles', 'misc'], // Add your namespaces here
+    defaultNS: 'misc', // Default namespace if none specified
     interpolation: {
       escapeValue: false,
     },
