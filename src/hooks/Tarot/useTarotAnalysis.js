@@ -17,7 +17,7 @@ const useTarotAnalysis = () => {
         setResponse(""); // Clear if you use setResponse.
 
         try {
-            const spreadLabel = selectedSpread?.label?.[i18n.language] || selectedSpread?.label?.["en"] || "";
+            const spreadLabel = selectedSpread?.label?.["en"] //selectedSpread?.label?.[i18n.language] || selectedSpread?.label?.["en"] || "";
 
             await analyzeDraw(drawnCards, spreadLabel, context, sessionId, i18n.language, (chunk) => {
                 if (chunk.startsWith("Error:")) {

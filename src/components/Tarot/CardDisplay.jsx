@@ -1,10 +1,12 @@
+// src/components/Tarot/CardDisplay.jsx
 import React from "react";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || "/";
 
 const CardDisplay = ({ drawnCards, revealedCards, language }) => {
   const { i18n } = useTranslation(); // Get the current language
+
   return (
     <div className="flex flex-wrap justify-center gap-6 my-8">
       {drawnCards.map((card, index) => (
@@ -32,13 +34,15 @@ const CardDisplay = ({ drawnCards, revealedCards, language }) => {
               className="absolute w-full h-full bg-yellow-300 text-black flex flex-col items-center justify-between rounded-lg shadow-xl border-2 border-yellow-500"
               style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
             >
-              <img
-                src={`${BASE_URL}tarot/cards/${card.img}`}
-                alt={card.name}
-                className={`w-full h-full object-contain rounded-t-lg ${revealedCards.includes(index) && card.orientation === "reversed" ? "rotate-180" : ""}`}
-                loading="lazy"
-              />
-              <p className="h-10 flex items-center justify-center text-lg font-semibold text-center">
+              <div className="w-full h-[70%] relative"> {/* Container for image */}
+                <img
+                  src={`${BASE_URL}tarot/cards/${card.img}`}
+                  alt={card.name}
+                  className={`absolute inset-0 w-full h-full object-contain rounded-t-lg ${revealedCards.includes(index) && card.orientation === "reversed" ? "rotate-180" : ""}`}
+                  loading="lazy"
+                />
+              </div>
+              <p className="h-auto py-2 px-1 flex items-center justify-center text-lg font-semibold text-center">
                 {i18n.language === "zh" ? card.nameZh : card.name}
               </p>
             </div>
