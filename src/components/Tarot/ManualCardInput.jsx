@@ -34,7 +34,7 @@ const ManualCardInput = ({ spread, onManualAnalyze }) => {
               <option value="">{t("select_card")}</option>
               {cardOptions.map((option) => (
                 <option key={option.value} value={option.value}>
-                  {option.label}
+                  {t(`tarot_cards.${option.label}`)}
                 </option>
               ))}
             </select>

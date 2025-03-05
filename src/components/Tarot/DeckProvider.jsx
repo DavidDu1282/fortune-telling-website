@@ -2,8 +2,8 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 //import { fetchTarotDeck } from "./api"; // REMOVED: No longer needed
 import { useTranslation } from "react-i18next";
-import tarotData from "../../assets/text/optimized_tarot_translated.json"; // Direct import
-
+// import tarotData from "../../assets/text/optimized_tarot_translated.json"; // Direct import
+import tarotData from "../../assets/text/simplified_tarot.json"; // Direct import
 
 const DeckContext = createContext(null);
 
@@ -27,8 +27,8 @@ export const DeckProvider = ({ children }) => {
 
     try {
       // Validate the structure of the imported JSON
-      if (tarotData && tarotData.cards && Array.isArray(tarotData.cards)) {
-        setTarotDeck(tarotData.cards);
+      if (tarotData  && Array.isArray(tarotData)) {
+        setTarotDeck(tarotData);
         setDeckError(null);
       } else {
         console.error("Invalid JSON structure: Missing or invalid 'cards' field");
