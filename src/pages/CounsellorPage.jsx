@@ -1,16 +1,17 @@
-// CounselorPage.jsx (Refactored)
-import React from "react";
+// d:\OtherCodingProjects\fortune-telling-website\src\pages\CounsellorPage.jsx
+import React, { useState, useEffect } from "react";
 import ChatHistory from "../components/Counsellor/ChatHistory";
 import ChatInput from "../components/Counsellor/ChatInput";
-import SpeechRecognitionButton from "../components/SpeechRecognitionButton";
-import useSpeechRecognition from "../hooks/useSpeechRecognition"; // Import custom hook
-import useChat from "../hooks/Counsellor/useChat";
+import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from "react-i18next";
+import useChat from "../hooks/Counsellor/useChat";
+import useSpeechRecognition from "../hooks/useSpeechRecognition";
 
 const CounselorPage = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation("counsellor");
   const API_URL = import.meta.env.VITE_API_URL || "";
-  const SESSION_ID = "unique-session-id"; //  Replace with actual session ID
+  const [sessionId, setSessionId] = useState(uuidv4());
+  const [input, setInput] = React.useState("");
 
   const {
     isListening,
@@ -18,39 +19,34 @@ const CounselorPage = () => {
     hasSpeechRecognition,
     speechRecognitionError,
     toggleListen,
-    setTranscript
   } = useSpeechRecognition(i18n.language);
 
-  const { messages, loading, sendMessage, t } = useChat(API_URL, SESSION_ID);
-    const [input, setInput] = React.useState("");
+  const { messages, loading, sendMessage,  } = useChat(API_URL, sessionId, setInput);
 
-  // Update input when transcript changes
-    React.useEffect(() => {
-        setInput(transcript);
-    }, [transcript]);
-
+  useEffect(() => {
+    setInput(transcript)
+  }, [transcript])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-800 to-blue-700 text-gray-100 p-6">
-      <div className="container mx-auto max-w-2xl bg-white shadow-lg rounded-lg p-6 text-gray-900">
+      <div className="container mx-auto max-w-2xl bg-white shadow-lg rounded-lg p-6 text-gray-900 flex flex-col h-full"> {/* Added flex flex-col h-full */}
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold text-gray-800">{t("title")}</h1>
         </div>
-        <ChatHistory messages={messages} loading={loading} t={t} />
-        <div className="flex mt-4">
+        <div className="h-[60vh] overflow-y-auto">
+          <ChatHistory messages={messages} loading={loading} t={t} />
+        </div>
+        <div className="mt-4">
           <ChatInput
             input={input}
             setInput={setInput}
             sendMessage={() => sendMessage(input)}
             t={t}
-          />
-          <SpeechRecognitionButton
-            hasSpeechRecognition={hasSpeechRecognition}
-            toggleListen={toggleListen}
             isListening={isListening}
-            loading={loading}
-            t={t}
+            toggleListen={toggleListen}
+            hasSpeechRecognition={hasSpeechRecognition}
             speechRecognitionError={speechRecognitionError}
+            loading={loading}
           />
         </div>
       </div>

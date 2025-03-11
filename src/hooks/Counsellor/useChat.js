@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
-const useChat = (apiUrl, initialSessionId) => {
+const useChat = (apiUrl, initialSessionId, setInput) => {
   const { t, i18n } = useTranslation("counsellor");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -36,6 +36,7 @@ const useChat = (apiUrl, initialSessionId) => {
         }
         throw new Error(`Server error: ${response.status} - ${errorData.detail || 'Unknown error'}`); // Use errorData.detail
       }
+      setInput("");
 
       if (!response.body) {
           throw new Error("ReadableStream not supported in this browser.");
