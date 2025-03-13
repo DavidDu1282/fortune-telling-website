@@ -1,7 +1,7 @@
 // src/hooks/Tarot/useTarotAnalysis.js
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { analyzeDraw } from "../../api/tarotApi";
+import { analyzeDraw } from "../../api/Tarot/tarotApi";
 
 const useTarotAnalysis = () => {
     const { i18n } = useTranslation("tarot");

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import Home from "./pages/Home";
 import TarotPage from "./pages/TarotPage";
 import NewFeature from "./pages/NewFeature";
+import BaguaPage from "./pages/BaguaPage";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import CounsellorPage from "./pages/CounsellorPage";
 import AuthForm from "./components/AuthForm"; // Import the AuthForm component
@@ -53,6 +54,8 @@ const AppContent = () => {
             <Link to="/tarot" className="text-white hover:underline">{t("tarot_title")}</Link>
             {/* <Link to="/new-feature" className="text-white hover:underline">{t("new_feature")}</Link> */}
             <Link to="/counsellor" className="text-white hover:underline">{t("counsellor_title")}</Link>
+            <Link to='/bagua' className="text-white hover:underline">{t("bagua_title")}</Link>
+
            {isAuthenticated ? (
               <button onClick={handleLogout} className="text-white hover:underline">{t("logout_title")}</button>
             ) : (
@@ -102,6 +105,17 @@ const AppContent = () => {
                     <title>{t("counsellor_title")}</title>
                   </Helmet>
                   <CounsellorPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bagua"
+              element={
+                <ProtectedRoute>
+                   <Helmet>
+                    <title>{t("bagua_title")}</title>
+                  </Helmet>
+                  <BaguaPage />
                 </ProtectedRoute>
               }
             />
