@@ -1,4 +1,4 @@
-// d:\OtherCodingProjects\fortune-telling-website\src\services\authService.js
+// fortune-telling-website\src\services\authService.js
 import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_API_URL || "";

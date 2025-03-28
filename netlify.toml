@@ -1,8 +1,0 @@
-[build]
-  command = "yarn build"
-  publish = "dist" # Replace with the correct output directory
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200

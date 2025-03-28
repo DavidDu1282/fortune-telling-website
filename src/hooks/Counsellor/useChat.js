@@ -17,13 +17,14 @@ const useChat = (apiUrl, initialSessionId, setInput) => {
       setLoading(true);
 
       try {
+        setInput("");
         const stream = await sendMessageToApi(
           apiUrl,
           initialSessionId,
           messageText,
           i18n.language
         );
-        setInput("");
+        
         const reader = stream.getReader();
         const decoder = new TextDecoder();
 

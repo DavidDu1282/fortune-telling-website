@@ -1,4 +1,4 @@
-// d:\OtherCodingProjects\fortune-telling-website\src\components\Counsellor\ChatInput.jsx
+// fortune-telling-website\src\components\Counsellor\ChatInput.jsx
 import React, { useState, useRef, useEffect } from "react";
 import SpeechRecognitionButton from "../SpeechRecognitionButton"; // Import the standalone button
 

@@ -4,9 +4,9 @@ import ReactMarkdown from 'react-markdown';
 
 const ChatHistory = ({ messages, loading, t }) => {
   return (
-    <div className="chat-container overflow-auto max-h-[400px] border p-3 rounded-md bg-gray-100">
+    <div className="chat-container overflow-auto max-h-[400px]  p-3 rounded-md bg-gray-700">
       {messages.map((msg, index) => (
-        <div key={index} className={`mb-2 p-2 rounded-lg ${msg.sender === "user" ? "bg-blue-200 self-end" : "bg-gray-300"}`}>
+        <div key={index} className={`mb-2 p-2 rounded-lg ${msg.sender === "user" ? "bg-blue-700 self-end" : "bg-gray-800"}`}>
           <ReactMarkdown>{msg.text}</ReactMarkdown>
         </div>
       ))}

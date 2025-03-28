@@ -1,4 +1,4 @@
-// d:\OtherCodingProjects\fortune-telling-website\src\components\ProtectedRoute.jsx
+// fortune-telling-website\src\components\ProtectedRoute.jsx
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
