@@ -91,7 +91,7 @@ const CounselorPage = () => {
 
   return (
     // <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-800 to-blue-700 text-gray-100 p-6 flex items-center justify-center">
-      <div className="min-h-screen container mx-auto bg-gray-800 shadow-lg rounded-lg p-6 text-gray-100 flex flex-col h-[80vh]"> {/* Changed bg-white to bg-gray-800, text-gray-900 to text-gray-100, h-[80vh] to h-[90vh] */}
+      <div className="container mx-auto bg-gray-800 shadow-lg rounded-lg p-6 text-gray-100 flex flex-col h-[80vh]"> {/* Changed bg-white to bg-gray-800, text-gray-900 to text-gray-100, h-[80vh] to h-[90vh] */}
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">{t("title")}</h1>
           <button
@@ -134,7 +134,7 @@ const CounselorPage = () => {
 
         {/* Chat Session */}
         {activeTab !== null && tabs[activeTab] && chatDataRef.current[activeTab] && (
-          <div className="flex-grow"> {/* Added flex-grow to take up more space */}
+          <div className="flex-1 flex flex-col min-h-0">{/* Added flex-grow to take up more space */}
           <ChatSession
             messages={chatDataRef.current[activeTab].messages}
             loading={chatDataRef.current[activeTab].loading}
