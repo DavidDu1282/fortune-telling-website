@@ -155,10 +155,10 @@ const AppContent = () => {
               <Route
                 path="/download"
                 element={
-                  <ProtectedRoute>
+                  <>
                     <Helmet><title>{t("download_title")}</title></Helmet>
                     <DownloadPage />
-                  </ProtectedRoute>
+                  </>
                 }
               />
             </Routes>
