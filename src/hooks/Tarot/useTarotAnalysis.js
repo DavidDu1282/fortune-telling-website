@@ -5,7 +5,7 @@ import { analyzeDraw } from "../../api/Tarot/tarotApi";
 
 const useTarotAnalysis = () => {
     const { i18n } = useTranslation("tarot");
-    const [response, setResponse] = useState(""); // Keep this if you need a "message"
+    const [response, setResponse] = useState("");
     const [detailedAnalysis, setDetailedAnalysis] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -13,15 +13,15 @@ const useTarotAnalysis = () => {
     const fetchAnalysis = useCallback(async (sessionId, selectedSpread, context, drawnCards) => {
         setLoading(true);
         setError(null);
-        setDetailedAnalysis(""); // Clear previous analysis on new request
-        setResponse(""); // Clear if you use setResponse.
+        setDetailedAnalysis("");
+        setResponse("");
 
         try {
-            const spreadLabel = selectedSpread?.label?.["en"] //selectedSpread?.label?.[i18n.language] || selectedSpread?.label?.["en"] || "";
+            const spreadLabel = selectedSpread?.label?.["en"] 
 
             await analyzeDraw(drawnCards, spreadLabel, context, sessionId, i18n.language, (chunk) => {
                 if (chunk.startsWith("Error:")) {
-                    setError(chunk); // Set error directly
+                    setError(chunk);
                 } else {
                   setDetailedAnalysis((prevAnalysis) => prevAnalysis + chunk);
                 }

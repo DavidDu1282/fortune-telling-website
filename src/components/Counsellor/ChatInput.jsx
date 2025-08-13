@@ -1,6 +1,6 @@
-// fortune-telling-website\src\components\Counsellor\ChatInput.jsx
+// src\components\Counsellor\ChatInput.jsx
 import React, { useState, useRef, useEffect } from "react";
-import SpeechRecognitionButton from "../SpeechRecognitionButton"; // Import the standalone button
+import SpeechRecognitionButton from "../SpeechRecognitionButton";
 
 const ChatInput = ({ input, setInput, sendMessage, t, isListening, toggleListen, hasSpeechRecognition, speechRecognitionError, loading }) => {
   const textareaRef = useRef(null);

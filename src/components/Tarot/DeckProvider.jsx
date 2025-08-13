@@ -1,8 +1,7 @@
 // src/components/Tarot/DeckProvider.jsx
 import React, { createContext, useState, useEffect, useContext } from "react";
-//import { fetchTarotDeck } from "./api"; // REMOVED: No longer needed
 import { useTranslation } from "react-i18next";
-// import tarotData from "../../assets/text/optimized_tarot_translated.json"; // Direct import
+
 import tarotData from "../../assets/text/simplified_tarot.json"; // Direct import
 
 const DeckContext = createContext(null);
@@ -18,15 +17,13 @@ export const useDeck = () => {
 export const DeckProvider = ({ children }) => {
   const [tarotDeck, setTarotDeck] = useState([]);
   const [deckError, setDeckError] = useState(null);
-  const [deckLoading, setDeckLoading] = useState(true); // Keep loading state (for a very short time)
+  const [deckLoading, setDeckLoading] = useState(true); 
   const { t } = useTranslation();
 
   useEffect(() => {
-    // No async function needed
-    setDeckLoading(true); // Start loading (it'll be very fast)
+    setDeckLoading(true);
 
     try {
-      // Validate the structure of the imported JSON
       if (tarotData  && Array.isArray(tarotData)) {
         setTarotDeck(tarotData);
         setDeckError(null);
@@ -35,13 +32,12 @@ export const DeckProvider = ({ children }) => {
         setDeckError(t("deck_empty_error"));
       }
     } catch (error) {
-      // Catch any errors during parsing (though unlikely with direct import)
       console.error("Error loading tarot deck:", error);
       setDeckError(t("deck_empty_error"));
     } finally {
-      setDeckLoading(false); // End loading
+      setDeckLoading(false);
     }
-  }, [t]); // Dependency array is still good practice
+  }, [t]);
 
   const value = {
     tarotDeck,
@@ -53,3 +49,5 @@ export const DeckProvider = ({ children }) => {
     <DeckContext.Provider value={value}>{children}</DeckContext.Provider>
   );
 };
+
+export default DeckProvider;

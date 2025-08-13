@@ -1,0 +1,15 @@
+{
+  "title": "下载",
+  "subtitle": "获取应用的最新安卓 APK。",
+  "loading": "正在加载版本信息...",
+  "error_prefix": "错误：",
+  "latest_version": "最新版本",
+  "release_notes": "更新说明",
+  "published": "发布日期",
+  "download_cta": "下载 APK",
+  "download_unavailable": "下载链接不可用。",
+  "direct_link": "直接链接",
+  "unknown": "未知"
+}
+
+

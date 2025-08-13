@@ -1,4 +1,4 @@
-// i18n.js
+// src/i18n.js
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import Backend from 'i18next-http-backend';
@@ -10,9 +10,9 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: "en",
-    debug: true, // Set to false in production
-    ns: ['tarot', 'counsellor', 'auth', 'home', 'routes_titles', 'misc'], // Add your namespaces here
-    defaultNS: 'misc', // Default namespace if none specified
+    debug: true,
+    ns: ['tarot', 'counsellor', 'auth', 'home', 'routes_titles', 'misc', 'download'], // Add namespaces here
+    defaultNS: 'misc',
     interpolation: {
       escapeValue: false,
     },

@@ -5,5 +5,8 @@
     "counsellor_title": "Counsellor",
     "login_title": "Login",
     "logout_title": "Logout",
-    "bagua_title": "Bagua"
+    "bagua_title": "Bagua",
+  "menu_title": "Menu",
+  "download_title": "Download"
+
 }

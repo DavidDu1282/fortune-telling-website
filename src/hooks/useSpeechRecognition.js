@@ -1,4 +1,4 @@
-// useSpeechRecognition.js (New File - Custom Hook)
+// src/hooks/useSpeechRecognition.js
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -20,7 +20,7 @@ const useSpeechRecognition = (initialLanguage) => {
         recognition.current = new SpeechRecognition();
         recognition.current.continuous = false;
         recognition.current.interimResults = true;
-        recognition.current.lang = initialLanguage; // Use initial language
+        recognition.current.lang = initialLanguage;
 
         recognition.current.onresult = (event) => {
           const currentTranscript = Array.from(event.results)
@@ -41,14 +41,11 @@ const useSpeechRecognition = (initialLanguage) => {
           console.error("Speech recognition error:", event.error);
           setSpeechRecognitionError(event.error);
           setIsListening(false);
-          // ... (rest of your error handling, same as before) ...
         };
       } catch (error) {
-        // ... (error handling, same as before) ...
       }
     } else {
         setHasSpeechRecognition(false);
-      // ... (no support message, same as before) ...
     }
 
     return () => {
@@ -64,7 +61,7 @@ const useSpeechRecognition = (initialLanguage) => {
     if (isListening) {
       recognition.current.stop();
     } else {
-      setTranscript(""); // Clear transcript on start
+      setTranscript("");
       try {
         recognition.current.start();
       } catch (error) {

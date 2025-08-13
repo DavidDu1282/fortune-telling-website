@@ -1,7 +1,7 @@
 // src/hooks/useManualCardSelection.js
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useDeck } from "../../components/Tarot/DeckProvider";  // Correct path
+import { useDeck } from "../../components/Tarot/DeckProvider";
 
 const useManualCardSelection = (spread, onManualAnalyze) => {
   const { t } = useTranslation("tarot");
@@ -33,7 +33,7 @@ const useManualCardSelection = (spread, onManualAnalyze) => {
     if (selectedCard) {
       newSelectedCards[index] = {
         name: selectedCard.name,
-        orientation: "upright", // Default orientation
+        orientation: "upright",
       };
     } else {
       newSelectedCards[index] = null;

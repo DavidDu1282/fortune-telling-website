@@ -1,21 +1,21 @@
-// fortune-telling-website\src\components\ProtectedRoute.jsx
+// src/components/ProtectedRoute.jsx
 import React from 'react';
-import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
+
+import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();
 
     if (loading) {
-        return <div>Loading...</div>; // Show loading indicator
+        return <div>Loading...</div>;
     }
 
     if (!isAuthenticated) {
-        // Redirect to login if not authenticated
         return <Navigate to="/login" replace />;
     }
 
-    return children; // Render the protected content
+    return children; 
 };
 
 export default ProtectedRoute;

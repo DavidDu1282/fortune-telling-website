@@ -5,5 +5,7 @@
   "input_placeholder": "Type your question...",
   "send": "Send",
   "stop_listening": "Stop Listening",
-  "start_listening": "Start Listening"
+  "start_listening": "Start Listening",
+  "addTab": "New Tab",
+  "tab": "Tab"
 }

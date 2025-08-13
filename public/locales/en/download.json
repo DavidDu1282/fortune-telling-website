@@ -1,0 +1,15 @@
+{
+  "title": "Download",
+  "subtitle": "Get the latest Android APK of the app.",
+  "loading": "Loading version info...",
+  "error_prefix": "Error:",
+  "latest_version": "Latest version",
+  "release_notes": "Release notes",
+  "published": "Published",
+  "download_cta": "Download APK",
+  "download_unavailable": "Download link not available.",
+  "direct_link": "Direct link",
+  "unknown": "Unknown"
+}
+
+

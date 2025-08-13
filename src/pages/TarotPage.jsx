@@ -2,14 +2,17 @@
 import React, { useState, useCallback } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
-import QuestionInput from "../components/Tarot/QuestionInput";
-import { DeckProvider } from "../components/Tarot/DeckProvider";
-import { SpreadController } from "../components/Tarot/SpreadController";
-import { CardSelector } from "../components/Tarot/CardSelector";
-import { AnalysisController } from "../components/Tarot/AnalysisController";
-import ManualCardInput from "../components/Tarot/ManualCardInput";
 import { v4 as uuidv4 } from 'uuid';
-import DeckStatus from "../components/Tarot/DeckStatus";
+
+import {
+    AnalysisController,
+    CardSelector,
+    DeckProvider,
+    DeckStatus,
+    ManualCardInput,
+    QuestionInput,
+    SpreadController,
+} from "../components/Tarot";
 
 const TarotPage = () => {
   const { t } = useTranslation("tarot");
@@ -18,16 +21,16 @@ const TarotPage = () => {
   const [sessionId, setSessionId] = useState(uuidv4());
   const [selectedSpread, setSelectedSpread] = useState(null);
   const [drawnCards, setDrawnCards] = useState([]);
-  const [analysisTriggered, setAnalysisTriggered] = useState(false); // Add analysisTriggered
+  const [analysisTriggered, setAnalysisTriggered] = useState(false);
 
   const handleDrawComplete = useCallback((cards) => {
     setDrawnCards(cards);
-    setAnalysisTriggered(false); // Reset when new cards are drawn
+    setAnalysisTriggered(false);
   }, []);
 
   const handleManualAnalyze = useCallback((selectedCards) => {
     setDrawnCards(selectedCards);
-    setAnalysisTriggered(false);  // Reset when manually analyzing
+    setAnalysisTriggered(false);
   }, []);
 
   return (
@@ -74,8 +77,8 @@ const TarotPage = () => {
                 selectedSpread={selectedSpread}
                 context={context}
                 drawnCards={drawnCards}
-                analysisTriggered={analysisTriggered} // Pass as prop
-                setAnalysisTriggered={setAnalysisTriggered} // Pass as prop
+                analysisTriggered={analysisTriggered}
+                setAnalysisTriggered={setAnalysisTriggered}
               />
             </DeckStatus>
           </DeckProvider>

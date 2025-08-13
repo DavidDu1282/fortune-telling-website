@@ -1,9 +1,10 @@
-// AuthForm.jsx
+// src/components/AuthForm.jsx
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import authService from '../services/authService';
 import { useTranslation } from 'react-i18next';
+
+import { useAuth } from '../context/AuthContext';
+import authService from '../services/authService';
 
 const AuthForm = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -50,8 +51,7 @@ const AuthForm = () => {
                         setFieldErrors(errorMap);
                         setError(t("validation_errors"));
                     } else {
-                      // Handle the case where registration failed but there are no specific validation errors.
-                      setError(t("registration_failed")); // Or a more specific error message.
+                      setError(t("registration_failed"));
                     }
                 }
             } else {

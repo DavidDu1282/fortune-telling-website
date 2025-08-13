@@ -1,7 +1,7 @@
-// useChat.js
+// src/hooks/useChat.js
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { sendMessageToApi, readStream } from "../../api/Counsellor/counsellorChatApi"; // Import API functions
+import { sendMessageToApi, readStream } from "../../api/Counsellor/counsellorChatApi"; 
 
 const useChat = (apiUrl, initialSessionId, setInput) => {
   const { t, i18n } = useTranslation("counsellor");
@@ -34,7 +34,6 @@ const useChat = (apiUrl, initialSessionId, setInput) => {
           { text: "", sender: "ai", id: Date.now() },
         ]);
 
-        //  Read the streamed response
         await readStream(
           reader,
           decoder,
@@ -69,7 +68,7 @@ const useChat = (apiUrl, initialSessionId, setInput) => {
       }
     },
     [apiUrl, initialSessionId, i18n.language, setInput]
-  ); // Correct dependencies
+  );
 
   return { messages, loading, sendMessage, t };
 };

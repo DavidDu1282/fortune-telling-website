@@ -5,5 +5,7 @@
   "input_placeholder": "输入你的问题...",
   "send": "发送",
   "stop_listening": "停止聆听",
-  "start_listening": "开始聆听"
+  "start_listening": "开始聆听",
+  "addTab": "新标签页",
+  "tab": "标签页"
 }

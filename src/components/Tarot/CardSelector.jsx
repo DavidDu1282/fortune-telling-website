@@ -1,10 +1,11 @@
 // src/components/Tarot/CardSelector.jsx
 import React from "react";
-import CardDisplay from "./CardDisplay";
 import { useTranslation } from "react-i18next";
-import useCardDrawing from "../../hooks/Tarot/useCardDrawing";  // Import the hook
 
-export const CardSelector = ({ spread, onDrawComplete }) => { // Renamed component
+import useCardDrawing from "../../hooks/Tarot/useCardDrawing";
+import CardDisplay from "./CardDisplay";
+
+export const CardSelector = ({ spread, onDrawComplete }) => {
   const { t } = useTranslation("tarot");
   const { drawCards, drawnCards, revealedCards } = useCardDrawing(spread, onDrawComplete);
 
@@ -21,4 +22,4 @@ export const CardSelector = ({ spread, onDrawComplete }) => { // Renamed compone
   );
 };
 
-export default CardSelector; // Add default export
+export default CardSelector;

@@ -1,6 +1,7 @@
 // src/hooks/Tarot/useCardDrawing.js
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+
 import { useDeck } from "../../components/Tarot/DeckProvider";
 
 const CARD_REVEAL_DELAY = 500;
@@ -18,14 +19,13 @@ const useCardDrawing = (spread, onDrawComplete) => {
       return;
     }
 
-    // Use the last successful draw if we have one
     if (lastDraw.current) {
       if (onDrawComplete) {
         onDrawComplete(lastDraw.current.selectedCards);
       }
       setDrawnCards(lastDraw.current.selectedCards);
       setRevealedCards(lastDraw.current.revealedCards);
-      return; // Exit early
+      return;
     }
 
     const count = spread.count;
@@ -36,14 +36,13 @@ const useCardDrawing = (spread, onDrawComplete) => {
     }));
 
     setDrawnCards(selectedCards);
-    setRevealedCards([]); // Clear previous reveals
+    setRevealedCards([]);
 
     for (let i = 0; i < selectedCards.length; i++) {
       await new Promise((resolve) => setTimeout(resolve, CARD_REVEAL_DELAY));
       setRevealedCards((prev) => [...prev, i]);
     }
 
-    // Store this draw
     lastDraw.current = {
       selectedCards,
       revealedCards: Array.from({ length: selectedCards.length }, (_, i) => i),
@@ -57,7 +56,7 @@ const useCardDrawing = (spread, onDrawComplete) => {
   useEffect(() => {
     setDrawnCards([]);
     setRevealedCards([]);
-    lastDraw.current = null; // Reset on spread change
+    lastDraw.current = null;
   }, [spread]);
 
   useEffect(() => {

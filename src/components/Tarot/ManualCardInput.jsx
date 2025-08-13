@@ -1,6 +1,6 @@
 // src/components/Tarot/ManualCardInput.jsx
 import React from "react";
-import useManualCardSelection from "../../hooks/Tarot/useManualCardSelection"; //Correct relative path
+import useManualCardSelection from "../../hooks/Tarot/useManualCardSelection";
 
 const ManualCardInput = ({ spread, onManualAnalyze }) => {
   const {

@@ -1,7 +1,7 @@
 // src/components/Tarot/SpreadController.jsx
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { spreads } from "./Spreads"; // Ensure spreads.js contains translated labels
+import { spreads } from "./Spreads";
 
 export const SpreadController = ({ onSpreadChange, initialSpread = "three_card" }) => {
   const { i18n } = useTranslation();
@@ -37,3 +37,5 @@ export const SpreadController = ({ onSpreadChange, initialSpread = "three_card" 
     </div>
   );
 };
+
+export default SpreadController;

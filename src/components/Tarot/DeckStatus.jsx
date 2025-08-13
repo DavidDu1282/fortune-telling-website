@@ -13,7 +13,7 @@ const DeckStatus = ({ children }) => {
     return <div>Error: {deckError}</div>;
   }
 
-  return <>{children}</>; // Render children when the deck is loaded and no error
+  return <>{children}</>;
 };
 
 export default DeckStatus;

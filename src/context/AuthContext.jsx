@@ -1,4 +1,4 @@
-// d:\OtherCodingProjects\fortune-telling-website\src\context\AuthContext.jsx
+// src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import authService from '../services/authService';
 
@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Helper function to get cookies (more robust than document.cookie directly)
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -21,20 +20,17 @@ export const AuthProvider = ({ children }) => {
     const checkAuthStatus = async () => {
       setLoading(true);
       try {
-        // Check auth status by calling the /check-auth endpoint
         const response = await authService.checkAuth();
 
         if (response.success) {
-          setUser({ username: response.username, email: response.email }); // Set user data
+          setUser({ username: response.username, email: response.email });
           setIsAuthenticated(true);
         } else {
-          // If checkAuth fails, consider the user not authenticated
           setUser(null);
           setIsAuthenticated(false);
         }
       } catch (error) {
         console.error("Error checking auth status:", error);
-        // Even if there's an error (e.g., network issue), clear user data
         setUser(null);
         setIsAuthenticated(false);
       } finally {
@@ -51,15 +47,11 @@ export const AuthProvider = ({ children }) => {
       console.log("AuthContext login result:", result);
 
       if (result.success) {
-        // No need to set local storage, cookies are handled by the server
-        // Instead, immediately check auth to get the user details from the server.
         const checkAuthResponse = await authService.checkAuth();
         if (checkAuthResponse.success) {
           setUser({username: checkAuthResponse.username, email: checkAuthResponse.email});
           setIsAuthenticated(true);
         } else {
-            //this handles a case where the login succeeds in setting a token,
-            //but on checking the newly set token the user is not found.
             setUser(null);
             setIsAuthenticated(false);
             return "Error checking user details.";
@@ -78,7 +70,6 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       const result = await authService.logout();
-      // No need to remove from local storage, server deletes cookies
       setUser(null);
       setIsAuthenticated(false);
       return null; // Success
@@ -87,13 +78,6 @@ export const AuthProvider = ({ children }) => {
       return error.message || 'An unexpected error occurred.';
     }
   };
-    
-  //No longer required.
-  // const getTokens = () => {
-  //   const accessToken = getCookie('access_token');
-  //   const refreshToken = getCookie('refresh_token');
-  //   return { accessToken, refreshToken };
-  // };
 
   const authContextValue = {
     user,
@@ -101,7 +85,6 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     loading,
-    // getTokens // Removed get tokens.
   };
 
   return (

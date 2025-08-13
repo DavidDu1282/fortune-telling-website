@@ -1,4 +1,4 @@
-// components/SpeechRecognitionButton.jsx
+// src/components/SpeechRecognitionButton.jsx
 import React from "react"
 const SpeechRecognitionButton = ({hasSpeechRecognition, toggleListen, isListening, loading, t, speechRecognitionError}) => {
     return (

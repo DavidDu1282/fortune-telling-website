@@ -1,3 +1,4 @@
+// src/pages/NewFeature.jsx
 import React from "react";
 
 const NewFeature = () => {

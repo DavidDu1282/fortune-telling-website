@@ -5,5 +5,8 @@
     "counsellor_title": "咨询师",
     "login_title": "登录",
     "logout_title": "登出",
-    "bagua_title": "八卦"
+    "bagua_title": "八卦",
+  "menu_title": "菜单",
+  "download_title": "下载"
+
 }

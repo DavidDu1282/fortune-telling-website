@@ -1,9 +1,9 @@
 // src/components/Tarot/QuestionInput.jsx
 import React from "react";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
 
-const QuestionInput = ({ context, setContext }) => { // Remove language prop
-  const { t } = useTranslation("tarot"); // Use the hook
+const QuestionInput = ({ context, setContext }) => {
+  const { t } = useTranslation("tarot");
 
   return (
     <div className="mb-4">

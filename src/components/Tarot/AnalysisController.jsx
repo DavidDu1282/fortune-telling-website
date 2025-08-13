@@ -1,9 +1,10 @@
 // src/components/Tarot/AnalysisController.jsx
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import AnalysisResults from "./AnalysisResults";
+
 import LoadingIndicator from "../LoadingIndicator";
 import useTarotAnalysis from "../../hooks/Tarot/useTarotAnalysis";
+import AnalysisResults from "./AnalysisResults";
 
 export const AnalysisController = ({
     sessionId,

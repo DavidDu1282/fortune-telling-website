@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 const BASE_URL = import.meta.env.VITE_BASE_URL || "/";
 
 const CardDisplay = ({ drawnCards, revealedCards, language }) => {
-  const { i18n, t } = useTranslation("tarot"); // Get the current language
+  const { i18n, t } = useTranslation("tarot");
 
   return (
     <div className="flex flex-wrap justify-center gap-6 my-8">

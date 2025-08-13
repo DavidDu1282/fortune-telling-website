@@ -1,0 +1,15 @@
+{
+  "title": "下載",
+  "subtitle": "取得此應用程式最新的 Android APK。",
+  "loading": "正在載入版本資訊...",
+  "error_prefix": "錯誤：",
+  "latest_version": "最新版本",
+  "release_notes": "更新內容",
+  "published": "發布時間",
+  "download_cta": "下載 APK",
+  "download_unavailable": "下載連結不可用。",
+  "direct_link": "直接連結",
+  "unknown": "未知"
+}
+
+
