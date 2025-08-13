@@ -30,8 +30,12 @@ const DownloadPage = () => {
   }, [API_URL]);
 
   const version = versionInfo?.version || "";
-  const relativeApkPath = versionInfo?.apk_url || (version ? `downloads/android/${version}/app-v${version}-universal.apk` : "");
-  const downloadUrl = relativeApkPath ? `${API_URL}/api/v1/${relativeApkPath}` : "";
+  const rawApkUrl = versionInfo?.apk_url || "";
+  const downloadUrl = rawApkUrl
+    ? (/^https?:\/\//i.test(rawApkUrl)
+      ? rawApkUrl
+      : `${API_URL}${rawApkUrl.startsWith("/") ? "" : "/"}${rawApkUrl}`)
+    : "";
 
   return (
     <div className="max-w-xl mx-auto bg-gray-800 shadow-lg rounded-lg p-6 text-gray-100">
