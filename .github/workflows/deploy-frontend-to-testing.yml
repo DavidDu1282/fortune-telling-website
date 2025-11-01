@@ -5,10 +5,15 @@ on:
     branches:
       - main  # Trigger deployment on push to the main branch
       - master  # Trigger deployment on push to the master branch
+      - testing
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    env:
+      HOST_IP: 140.245.46.198
+      USER: ubuntu
 
     steps:
       # (Steps 1-5 remain the same - Checkout, SSH Setup, Node Setup, Deploy to Oracle VM)
@@ -25,7 +30,7 @@ jobs:
       # Step 3: Add host key to known hosts
       - name: Add host key to known hosts
         run: |
-          ssh-keyscan -H 140.245.56.252 >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ env.HOST_IP }} >> ~/.ssh/known_hosts
 
       # Step 4: Install Node.js, Corepack, and build the project
       - name: Set up Node.js
@@ -44,21 +49,21 @@ jobs:
         env:
           RSYNC_PASSWORD: ${{ secrets.RSYNC_PASSWORD }} # Optional: If you use rsync with a password
         run: |
-          rsync -avz --delete ./dist/ ubuntu@140.245.56.252:/home/ubuntu/fortune-telling-website/
+          rsync -avz --delete ./dist/ ${{ env.USER }}@${{ env.HOST_IP }}:/home/${{ env.USER }}/fortune-telling-website/
 
       # Step 6: Restart Docker Container (Instead of Nginx service)
       - name: Restart Nginx Docker Container
         run: |
-          ssh ubuntu@140.245.56.252 << 'EOF'
+          ssh ${{ env.USER }}@${{ env.HOST_IP }} << 'EOF'
           echo "Restarting Nginx Docker Container..."
-          docker-compose -f /home/ubuntu/website-nginx/docker-compose.yml down
-          docker-compose -f /home/ubuntu/website-nginx/docker-compose.yml up -d
+          docker-compose -f /home/${{ env.USER }}/website-nginx/docker-compose.yml down
+          docker-compose -f /home/${{ env.USER }}/website-nginx/docker-compose.yml up -d
           EOF
 
       # Step 7: Verify Deployment (Check Docker Container Status)
       - name: Verify Deployment (Check Docker Container Status)
         run: |
-          ssh ubuntu@140.245.56.252 << 'EOF'
+          ssh ${{ env.USER }}@${{ env.HOST_IP }} << 'EOF'
           echo "Checking Nginx Docker Container status..."
           docker ps
           EOF

@@ -1,0 +1,68 @@
+name: Deploy React Frontend to Production
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment on push to the main branch
+      - master  # Trigger deployment on push to the master branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      HOST_IP: 8.209.197.233
+      USER: david
+
+    steps:
+      # (Steps 1-5 remain the same - Checkout, SSH Setup, Node Setup, Deploy to Oracle VM)
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up SSH for deployment
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+      # Step 3: Add host key to known hosts
+      - name: Add host key to known hosts
+        run: |
+          ssh-keyscan -H ${{ env.HOST_IP }} >> ~/.ssh/known_hosts
+
+      # Step 4: Install Node.js, Corepack, and build the project
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Enable Corepack and install dependencies with Yarn
+        run: |
+          corepack enable
+          yarn install
+          yarn build
+
+      # Step 5: Deploy built files to the server
+      - name: Deploy to Oracle VM
+        env:
+          RSYNC_PASSWORD: ${{ secrets.RSYNC_PASSWORD }} # Optional: If you use rsync with a password
+        run: |
+          rsync -avz --delete ./dist/ ${{ env.USER }}@${{ env.HOST_IP }}:/home/${{ env.USER }}/fortune-telling-website/
+
+      # Step 6: Restart Docker Container (Instead of Nginx service)
+      - name: Restart Nginx Docker Container
+        run: |
+          ssh ${{ env.USER }}@${{ env.HOST_IP }} << 'EOF'
+          echo "Restarting Nginx Docker Container..."
+          docker-compose -f /home/${{ env.USER }}/website-nginx/docker-compose.yml down
+          docker-compose -f /home/${{ env.USER }}/website-nginx/docker-compose.yml up -d
+          EOF
+
+      # Step 7: Verify Deployment (Check Docker Container Status)
+      - name: Verify Deployment (Check Docker Container Status)
+        run: |
+          ssh ${{ env.USER }}@${{ env.HOST_IP }} << 'EOF'
+          echo "Checking Nginx Docker Container status..."
+          docker ps
+          EOF
